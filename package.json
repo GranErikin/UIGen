@@ -1,0 +1,23 @@
+{
+  "name": "uigen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "js2xmlparser": "^4.0.0",
+    "jsontoxml": "^1.0.1",
+    "request": "^2.88.0",
+    "restify": "^8.3.3",
+    "restify-clients": "^2.6.6",
+    "xml-formatter": "^1.1.0",
+    "xml-js": "^1.6.11"
+  }
+}
