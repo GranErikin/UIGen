@@ -4,7 +4,7 @@ const { exec } = require("child_process");
 const opt2html = (req, res, next) => {
 	let uid = req.params.uid;
 	exec(
-		`java -cp "./lib/*:$GROOVY_HOME/lib/*:lib/openEHR_OPT.jar" com.cabolabs.openehr.opt.Main uigen ${uid} ./html`,
+		`java -cp "./lib/*:$GROOVY_HOME/lib/*:lib/openEHR_OPT.jar" com.cabolabs.openehr.opt.Main uigen ./opt/${uid}.opt ./html`,
 		(err, stdout, stderr) => {
 			if (err) {
 				console.log(err);
@@ -27,17 +27,17 @@ const opt2version = (req, res, next) => {
 	let uid = req.params.uid;
 
 	exec(
-		`java -cp "./lib/*:$GROOVY_HOME/lib/*:lib/openEHR_OPT.jar" com.cabolabs.openehr.opt.Main ingen ${uid} ./version`,
+		`java -cp "./lib/*:$GROOVY_HOME/lib/*:lib/openEHR_OPT.jar" com.cabolabs.openehr.opt.Main ingen ./opt/${uid}.opt ./version`,
 		(err, stdout, stderr) => {
 			if (err) {
 				console.log(err);
 				return next(err);
 			}
 
-			let contents = fs.readFileSync(`./html/${uid}.html`, "utf8");
+			let contents = fs.readFileSync(`./version/${uid}.xml`, "utf8");
 			res.send({
 				data: {
-					html: contents
+					xml: contents
 				},
 				success: true
 			});
