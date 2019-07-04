@@ -27,7 +27,7 @@ const opt2version = (req, res, next) => {
 	let uid = req.params.uid;
 
 	exec(
-		`java -cp "./lib/*:$GROOVY_HOME/lib/*:lib/openEHR_OPT.jar" com.cabolabs.openehr.opt.Main ingen ./opt/${uid}.opt ./version/${uid}.xml`,
+		`java -cp "./lib/*:$GROOVY_HOME/lib/*:lib/openEHR_OPT.jar" com.cabolabs.openehr.opt.Main ingen ./opt/${uid}.opt ./version/${uid}.xml 1 tagged`,
 		(err, stdout, stderr) => {
 			if (err) {
 				console.log(err);
