@@ -2,6 +2,7 @@ const fs = require("fs");
 const writeOpt = (req, res, next) => {
 
 	let uid = req.params.uid;
+	let xml = req.body.slice(1);
 
 	fs.writeFile(`./opt/${uid}.opt`, xml, function (err) {
         if (err) {
