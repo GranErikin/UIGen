@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 const restify = require("restify");
 const converters = require("./middlewares/converters");
 const utils = require("./middlewares/utils");
@@ -7,6 +8,15 @@ const server = restify.createServer({
 	name: "UiGen",
 	version: "1.0.0"
 });
+
+setupSpace = () => {
+	let folders = ['opt','html','version'];
+	folders.forEach((folder) => {
+		if(!fs.existsSync(folder)) 
+			fs.mkdirSync(folder);
+	})
+}
+setupSpace();
 
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
@@ -29,3 +39,4 @@ server.post("/opt2version/:uid", [utils.writeOpt, converters.opt2version]);
 server.listen(process.env.UIGEN_PORT, function() {
 	console.log("%s listening at %s", server.name, server.url);
 });
+
