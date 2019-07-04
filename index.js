@@ -23,8 +23,8 @@ server.post("/transient", function(req, res, next) {
 	next();
 });
 
-server.post("/ui/opt2html/:uid", [utils.writeOpt, converters.opt2html]);
-server.post("/ui/opt2version/:uid", [utils.writeOpt, converters.opt2version]);
+server.post("/opt2html/:uid", [utils.writeOpt, converters.opt2html]);
+server.post("/opt2version/:uid", [utils.writeOpt, converters.opt2version]);
 
 server.listen(process.env.UIGEN_PORT, function() {
 	console.log("%s listening at %s", server.name, server.url);
