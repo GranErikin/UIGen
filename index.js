@@ -33,11 +33,13 @@ server.post("/transient", function (req, res, next) {
     next();
 });
 
-server.post("/opt2html/:uid", [(req, res, next) => {
+server.use((req, res, next) => {
     console.log(req.body);
     console.log(req.params);
     return next();
-}, utils.writeOpt, converters.opt2html]);
+})
+
+server.post("/opt2html/:uid", [utils.writeOpt, converters.opt2html]);
 
 server.post("/opt2version/:uid", [utils.writeOpt, converters.opt2version]);
 

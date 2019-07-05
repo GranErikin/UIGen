@@ -12,12 +12,7 @@ const opt2html = (req, res, next) => {
 			}
 
 			let contents = fs.readFileSync(`./html/${uid}.html`, "utf8");
-			res.send({
-				data: {
-					html: contents
-				},
-				success: true
-			});
+			res.send(contents);
 			next();
 		}
 	);
@@ -35,12 +30,7 @@ const opt2version = (req, res, next) => {
 			}
 
 			let contents = fs.readFileSync(`./version/${uid}.xml`, "utf8");
-			res.send({
-				data: {
-					xml: contents
-				},
-				success: true
-			});
+			res.send(contents);
 			next();
 		}
 	);
