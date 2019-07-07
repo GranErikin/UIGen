@@ -4,13 +4,29 @@ const fs = require("fs")
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../index");
-chai.should();
+const should = chai.should();
 
 chai.use(chaiHttp);
 
 let opt = fs.readFileSync("./test/vital_signs_summary.en.v1.opt");
+let optError = fs.readFileSync("./test/vital_signs_summary.en.v1.error.opt");
 
+//TODO: Implement file creation validation
 describe("/POST opt2html", () => {
+    it("it should NOT convert the opt to HTML form", (done) => {
+        chai.request(server)
+            .post("/opt2html/testuid")
+            .set('Content-Type', 'application/xml')
+            .send(optError)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a("object");
+                res.body.should.to.have.all.keys(["success","data","message"]);
+                res.body.success.should.to.equal(false);
+                res.body.message.should.to.equal("ERROR_OPT_CONVERTION");
+                done();
+          });
+    });
     it("it should convert the opt to HTML form", (done) => {
         chai.request(server)
             .post("/opt2html/testuid")
@@ -29,6 +45,20 @@ describe("/POST opt2html", () => {
 });
 
 describe("/POST opt2contribution", () => {
+    it("it should NOT convert the opt to XML Tagged Contribution", (done) => {
+        chai.request(server)
+            .post("/opt2contribution/testuid")
+            .set('Content-Type', 'application/xml')
+            .send(optError)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a("object");
+                res.body.should.to.have.all.keys(["success","data","message"]);
+                res.body.success.should.to.equal(false);
+                res.body.message.should.to.equal("ERROR_OPT_CONVERTION");
+                done();
+          });
+    });
     it("it should convert the opt to XML Tagged Contribution", (done) => {
         chai.request(server)
             .post("/opt2contribution/testuid")
@@ -47,7 +77,21 @@ describe("/POST opt2contribution", () => {
 });
 
 describe("/POST opt2bundle", () => {
-    it("it should convert the opt to HTML form and XML Tagged Contribution", (done) => {
+    it("it should NOT convert the opt to HTML and XML Bundle", (done) => {
+        chai.request(server)
+            .post("/opt2bundle/testuid")
+            .set('Content-Type', 'application/xml')
+            .send(optError)
+            .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.be.a("object");
+                res.body.should.to.have.all.keys(["success","data","message"]);
+                res.body.success.should.to.equal(false);
+                res.body.message.should.to.equal("ERROR_OPT_CONVERTION");
+                done();
+          });
+    });
+    it("it should convert the opt to HTML and XML Bundle", (done) => {
         chai.request(server)
             .post("/opt2bundle/testuid")
             .set('Content-Type', 'application/xml')
