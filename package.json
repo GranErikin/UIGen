@@ -4,20 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "nyc mocha",
     "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^3.1.0",
+    "bunyan": "^1.8.12",
     "dotenv": "^8.0.0",
-    "js2xmlparser": "^4.0.0",
-    "jsontoxml": "^1.0.1",
-    "request": "^2.88.0",
     "restify": "^8.3.3",
-    "restify-clients": "^2.6.6",
-    "xml-formatter": "^1.1.0",
-    "xml-js": "^1.6.11"
+    "restify-cors-middleware": "^1.1.1",
+    "restify-router": "^0.5.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1"
   }
 }

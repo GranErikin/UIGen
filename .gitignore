@@ -1,9 +1,9 @@
 node_modules
 .env
-parsetest.js
-xmltest.js
 
 # Generated files
 html
-version
+contribution
 opt
+logs
+.nyc_output

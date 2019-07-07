@@ -3,4 +3,6 @@ node_modules
 
 opt
 html
-version
+contribution
+logs
+.nyc_output

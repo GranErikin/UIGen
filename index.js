@@ -1,49 +1,52 @@
 require("dotenv").config();
 const fs = require("fs");
 const restify = require("restify");
-const converters = require("./middlewares/converters");
-const utils = require("./middlewares/utils");
+const router = new (require('restify-router')).Router();
+const corsMiddleware = require("restify-cors-middleware");
+const utils = require("./handlers/utils");
+const logger = require("./helpers/logger");
+const routes = require("./routes");
 
 const server = restify.createServer({
-    name: "UiGen",
-    version: "1.0.0"
+    name: "OPT Convertion Service",
+    version: "1.0.0",
+    log: logger
 });
 
-setupSpace = () => {
-    let folders = ['opt', 'html', 'version'];
-    folders.forEach((folder) => {
-        if (!fs.existsSync(folder))
-            fs.mkdirSync(folder);
-    })
-}
-setupSpace();
+let folders = ['opt', 'html', 'contribution'];
+folders.forEach((folder) => {
+    if (!fs.existsSync(folder))
+        fs.mkdirSync(folder);
+});
 
+const cors = corsMiddleware({
+    preflightMaxAge: 5, //Optional
+    origins: ['*'],
+    allowHeaders: [],
+    exposeHeaders: []
+})
+   
+server.pre(cors.preflight);
+server.use(cors.actual);
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
+server.use(utils.logRequestPayload);
 
-server.post("/transient", function (req, res, next) {
-    console.log(req.params);
-    console.log(req.body);
+router.add("",routes);
+router.applyRoutes(server);
 
-    res.send({
-        message: "DATA SAVED"
-    });
+server.on('after', restify.plugins.metrics({ server: server }, function onMetrics(err, metrics) {
+    //logger.info(`${metrics.method} ${metrics.path} ${metrics.statusCode} ${metrics.latency} ms`);
+    logger.info(metrics);
+}));
 
-    next();
+server.on('uncaughtException', function (req, res, route, err) {
+	logger.error(err);
 });
 
-server.use((req, res, next) => {
-    console.log(req.body);
-    console.log(req.params);
-    return next();
-})
-
-server.post("/opt2html/:uid", [utils.writeOpt, converters.opt2html]);
-
-server.post("/opt2version/:uid", [utils.writeOpt, converters.opt2version]);
-
-server.listen(process.env.UIGEN_PORT, function () {
-    console.log("%s listening at %s", server.name, server.url);
+server.listen(process.env.PORT, function () {
+    logger.info('%s listening at %s with %s', server.name, server.url, process.env.NODE_ENV);
 });
 
+module.exports = server;
