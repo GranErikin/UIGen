@@ -4,5 +4,6 @@ node_modules
 opt
 html
 contribution
+instance
 logs
 .nyc_output
