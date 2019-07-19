@@ -29,7 +29,7 @@ describe("/POST validate/instance", () => {
                 done();
           });
     });
-    it("XML should be NOT VALID", (done) => {
+    it("XML should be VALID", (done) => {
         chai.request(server)
             .post("/validate/instance/testuid")
             .set('Content-Type', 'application/xml')
