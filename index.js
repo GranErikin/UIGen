@@ -13,7 +13,7 @@ const server = restify.createServer({
     log: logger
 });
 
-let folders = ['opt', 'html', 'contribution'];
+let folders = ['opt', 'html', 'contribution', 'instance'];
 folders.forEach((folder) => {
     if (!fs.existsSync(folder))
         fs.mkdirSync(folder);

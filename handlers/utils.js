@@ -1,13 +1,14 @@
 const fs = require("fs");
 const utils = require("../helpers/utils");
-function writeOpt (req, res, next) {
+const opt = require("../gateways/opt");
+function writeFile (req, res, next) {
 
 	let uid = req.params.uid;
 	let xml = req.body;
 
-	fs.writeFile(`./opt/${uid}.opt`, xml, function (err) {
+	fs.writeFile(`./${req.fileType}/${uid}.xml`, xml, function (err) {
         if (err) {
-            res.send(500, utils.buildRespose(false, null, "ERROR_OPT_WRITE"));
+            res.send(500, utils.buildRespose(false, null, "ERROR_FILE_WRITE"));
             return next(err);
 		}
 		next();
@@ -23,4 +24,23 @@ function logRequestPayload (req, res, next) {
     return next();
 }
 
-module.exports= {writeOpt, logRequestPayload};
+function validateInstance( req, res, next) {
+	let uid = req.params.uid;
+	opt.validateInstance(uid,(err, response) => {
+		let results = response.split('\n');
+		results.pop();
+		let code = 200;
+		let data = {
+			valid: true
+		}
+		if(results.shift().includes('NOT VALID')){
+			data.valid=false;
+			code=400;
+			data['results'] = results
+		}
+		res.send(code, utils.buildRespose(true, data));
+		next();
+	});
+}
+
+module.exports= {writeFile, logRequestPayload, validateInstance};

@@ -1,0 +1,1040 @@
+<version xmlns="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ORIGINAL_VERSION">
+  <contribution>
+    <id xsi:type="HIER_OBJECT_ID">
+      <value>[[CONTRIBUTION:::UUID]]</value>
+    </id>
+    <namespace>EHR::COMMON</namespace>
+    <type>CONTRIBUTION</type>
+  </contribution>
+  <commit_audit>
+    <system_id>CABOLABS_EHR</system_id>
+    <committer xsi:type="PARTY_IDENTIFIED">
+      <external_ref>
+        <id xsi:type="HIER_OBJECT_ID">
+          <value>[[COMMITTER_ID:::UUID]]</value>
+        </id>
+        <namespace>DEMOGRAPHIC</namespace>
+        <type>PERSON</type>
+      </external_ref>
+      <name>[[COMMITTER_NAME:::STRING]]</name>
+    </committer>
+    <time_committed>
+      <value>[[TIME_COMMITTED:::DATETIME]]</value>
+    </time_committed>
+    <change_type>
+      <value>creation</value>
+      <defining_code>
+        <terminology_id>
+          <value>openehr</value>
+        </terminology_id>
+        <code_string>249</code_string>
+      </defining_code>
+    </change_type>
+  </commit_audit>
+  <uid>
+    <value>[[VERSION_ID:::VERSION_ID]]</value>
+  </uid>
+  <data xsi:type="COMPOSITION" archetype_node_id="openEHR-EHR-COMPOSITION.health_summary.v1">
+    <name>
+      <value>Health summary</value>
+    </name>
+    <archetype_details>
+      <archetype_id>
+        <value>openEHR-EHR-COMPOSITION.health_summary.v1</value>
+      </archetype_id>
+      <template_id>
+        <value>vital_signs_summary.en.v1</value>
+      </template_id>
+      <rm_version>1.0.2</rm_version>
+    </archetype_details>
+    <language>
+      <terminology_id>
+        <value>ISO_639-1</value>
+      </terminology_id>
+      <code_string>en</code_string>
+    </language>
+    <territory>
+      <terminology_id>
+        <value>ISO_3166-1</value>
+      </terminology_id>
+      <code_string>UY</code_string>
+    </territory>
+    <category>
+      <value>event</value>
+      <defining_code>
+        <terminology_id>
+          <value>openehr</value>
+        </terminology_id>
+        <code_string>433</code_string>
+      </defining_code>
+    </category>
+    <composer xsi:type="PARTY_IDENTIFIED">
+      <external_ref>
+        <id xsi:type="HIER_OBJECT_ID">
+          <value>[[COMPOSER_ID:::UUID]]</value>
+        </id>
+        <namespace>DEMOGRAPHIC</namespace>
+        <type>PERSON</type>
+      </external_ref>
+      <name>[[COMPOSER_NAME:::STRING]]</name>
+    </composer>
+    <context>
+      <start_time>
+        <value>[[COMPOSITION_DATE:::DATETIME]]</value>
+      </start_time>
+      <setting>
+        <value>[[COMPOSITION_SETTING_VALUE:::STRING]]</value>
+        <defining_code>
+          <terminology_id>
+            <value>openehr</value>
+          </terminology_id>
+          <code_string>[[COMPOSITION_SETTING_CODE:::STRING]]</code_string>
+        </defining_code>
+      </setting>
+      <other_context archetype_node_id="at0001" xsi:type="ITEM_TREE">
+        <name>
+          <value>Tree</value>
+        </name><!-- SLOT IN /context/other_context[at0001]/items[at0002] NOT PROCESSED -->
+      </other_context>
+    </context>
+    <content archetype_node_id="openEHR-EHR-SECTION.vital_signs.v0" xsi:type="SECTION">
+      <name>
+        <value>Vital signs</value>
+      </name>
+      <items archetype_node_id="openEHR-EHR-OBSERVATION.respiration.v1" xsi:type="OBSERVATION">
+        <name>
+          <value>Respirations</value>
+        </name>
+        <language>
+          <terminology_id>
+            <value>ISO_639-1</value>
+          </terminology_id>
+          <code_string>en</code_string>
+        </language>
+        <encoding>
+          <terminology_id>
+            <value>Unicode</value>
+          </terminology_id>
+          <code_string>UTF-8</code_string>
+        </encoding>
+        <subject xsi:type="PARTY_SELF" />
+        <data archetype_node_id="at0001" xsi:type="HISTORY">
+          <name>
+            <value>history</value>
+          </name>
+          <origin xsi:type="DV_DATE_TIME">
+            <value>[[history.origin:::DATETIME]]</value>
+          </origin>
+          <events archetype_node_id="at0002" xsi:type="POINT_EVENT">
+            <name>
+              <value>Any event</value>
+            </name>
+            <time xsi:type="DV_DATE_TIME">
+              <value>[[Any event.time:::DATETIME]]</value>
+            </time>
+            <data archetype_node_id="at0003" xsi:type="ITEM_TREE">
+              <name>
+                <value>List</value>
+              </name>
+              <items archetype_node_id="at0004" xsi:type="ELEMENT">
+                <name>
+                  <value>Rate</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Rate:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Rate:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0005" xsi:type="ELEMENT">
+                <name>
+                  <value>Rhythm</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Rhythm:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Rhythm:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at0016" xsi:type="ELEMENT">
+                <name>
+                  <value>Depth</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Depth:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Depth:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at0024" xsi:type="ELEMENT">
+                <name>
+                  <value>Description</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Description:::STRING]]</value>
+                </value>
+              </items>
+            </data>
+            <state archetype_node_id="at0022" xsi:type="ITEM_TREE">
+              <name>
+                <value>List</value>
+              </name><!-- SLOT IN /data[at0001]/events[at0002]/state[at0022]/items[at0055] NOT PROCESSED -->
+              <items archetype_node_id="at0056" xsi:type="ELEMENT">
+                <name>
+                  <value>Confounding factors</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Confounding factors:::STRING]]</value>
+                </value>
+              </items><!-- SLOT IN /data[at0001]/events[at0002]/state[at0022]/items[at0037] NOT PROCESSED -->
+            </state>
+          </events>
+        </data>
+      </items>
+      <items archetype_node_id="openEHR-EHR-OBSERVATION.pulse.v1" xsi:type="OBSERVATION">
+        <name>
+          <value>Pulse/Heart beat</value>
+        </name>
+        <language>
+          <terminology_id>
+            <value>ISO_639-1</value>
+          </terminology_id>
+          <code_string>en</code_string>
+        </language>
+        <encoding>
+          <terminology_id>
+            <value>Unicode</value>
+          </terminology_id>
+          <code_string>UTF-8</code_string>
+        </encoding>
+        <subject xsi:type="PARTY_SELF" />
+        <protocol archetype_node_id="at0010" xsi:type="ITEM_TREE">
+          <name>
+            <value>List</value>
+          </name>
+          <items archetype_node_id="at1019" xsi:type="ELEMENT">
+            <name>
+              <value>Method</value>
+            </name>
+            <value xsi:type="DV_CODED_TEXT">
+              <value>[[Method:::CODEDTEXT_VALUE]]</value>
+              <defining_code>
+                <terminology_id>
+                  <value>local</value>
+                </terminology_id>
+                <code_string>[[Method:::CODEDTEXT_CODE]]</code_string>
+              </defining_code>
+            </value>
+          </items>
+          <items archetype_node_id="at1037" xsi:type="ELEMENT">
+            <name>
+              <value>Body site</value>
+            </name>
+            <value xsi:type="DV_CODED_TEXT">
+              <value>[[Body site:::CODEDTEXT_VALUE]]</value>
+              <defining_code>
+                <terminology_id>
+                  <value>local</value>
+                </terminology_id>
+                <code_string>[[Body site:::CODEDTEXT_CODE]]</code_string>
+              </defining_code>
+            </value>
+          </items><!-- SLOT IN /protocol[at0010]/items[at1013] NOT PROCESSED --><!-- SLOT IN /protocol[at0010]/items[at1056] NOT PROCESSED -->
+        </protocol>
+        <data archetype_node_id="at0002" xsi:type="HISTORY">
+          <name>
+            <value>history</value>
+          </name>
+          <origin xsi:type="DV_DATE_TIME">
+            <value>[[history_1.origin:::DATETIME]]</value>
+          </origin>
+          <events archetype_node_id="at0003" xsi:type="POINT_EVENT">
+            <name>
+              <value>Any event</value>
+            </name>
+            <time xsi:type="DV_DATE_TIME">
+              <value>[[Any event_2.time:::DATETIME]]</value>
+            </time>
+            <data archetype_node_id="at0001" xsi:type="ITEM_TREE">
+              <name>
+                <value>structure</value>
+              </name>
+              <items archetype_node_id="at0004" xsi:type="ELEMENT">
+                <name xsi:type="DV_CODED_TEXT">
+                  <value>[[Rate_3:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Rate_3:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Rate_4:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Rate_4:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0005" xsi:type="ELEMENT">
+                <name>
+                  <value>Regular?</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Regular?:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Regular?:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at1055" xsi:type="ELEMENT">
+                <name>
+                  <value>Irregular type</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Irregular type:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Irregular type:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at1030" xsi:type="ELEMENT">
+                <name>
+                  <value>Character</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Character:::STRING]]</value>
+                </value>
+              </items>
+              <items archetype_node_id="at1022" xsi:type="ELEMENT">
+                <name>
+                  <value>Clinical description</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Clinical description:::STRING]]</value>
+                </value>
+              </items>
+              <items archetype_node_id="at1023" xsi:type="ELEMENT">
+                <name xsi:type="DV_CODED_TEXT">
+                  <value>[[Clinical interpretation:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Clinical interpretation:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Clinical interpretation_5:::STRING]]</value>
+                </value>
+              </items>
+            </data>
+            <state archetype_node_id="at0012" xsi:type="ITEM_TREE">
+              <name>
+                <value>List</value>
+              </name>
+              <items archetype_node_id="at0013" xsi:type="ELEMENT">
+                <name>
+                  <value>Position</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Position:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Position:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at1018" xsi:type="ELEMENT">
+                <name>
+                  <value>Confounding factors</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Confounding factors_6:::STRING]]</value>
+                </value>
+              </items><!-- SLOT IN /data[at0002]/events[at0003]/state[at0012]/items[at1017] NOT PROCESSED -->
+            </state>
+          </events>
+        </data>
+      </items>
+      <items archetype_node_id="openEHR-EHR-OBSERVATION.blood_pressure.v1" xsi:type="OBSERVATION">
+        <name>
+          <value>Blood Pressure</value>
+        </name>
+        <language>
+          <terminology_id>
+            <value>ISO_639-1</value>
+          </terminology_id>
+          <code_string>en</code_string>
+        </language>
+        <encoding>
+          <terminology_id>
+            <value>Unicode</value>
+          </terminology_id>
+          <code_string>UTF-8</code_string>
+        </encoding>
+        <subject xsi:type="PARTY_SELF" />
+        <protocol archetype_node_id="at0011" xsi:type="ITEM_TREE">
+          <name>
+            <value>Tree</value>
+          </name>
+          <items archetype_node_id="at0013" xsi:type="ELEMENT">
+            <name>
+              <value>Cuff size</value>
+            </name>
+            <value xsi:type="DV_CODED_TEXT">
+              <value>[[Cuff size:::CODEDTEXT_VALUE]]</value>
+              <defining_code>
+                <terminology_id>
+                  <value>local</value>
+                </terminology_id>
+                <code_string>[[Cuff size:::CODEDTEXT_CODE]]</code_string>
+              </defining_code>
+            </value>
+          </items>
+          <items archetype_node_id="at1033" xsi:type="CLUSTER">
+            <name>
+              <value>Location</value>
+            </name>
+            <items archetype_node_id="at0014" xsi:type="ELEMENT">
+              <name>
+                <value>Location of measurement</value>
+              </name>
+              <value xsi:type="DV_CODED_TEXT">
+                <value>[[Location of measurement:::CODEDTEXT_VALUE]]</value>
+                <defining_code>
+                  <terminology_id>
+                    <value>local</value>
+                  </terminology_id>
+                  <code_string>[[Location of measurement:::CODEDTEXT_CODE]]</code_string>
+                </defining_code>
+              </value>
+            </items>
+            <items archetype_node_id="at1034" xsi:type="ELEMENT">
+              <name>
+                <value>X - Specific location</value>
+              </name>
+              <value xsi:type="DV_TEXT">
+                <value>[[X - Specific location:::STRING]]</value>
+              </value>
+            </items>
+          </items><!-- SLOT IN /protocol[at0011]/items[at1057] NOT PROCESSED -->
+          <items archetype_node_id="at1035" xsi:type="ELEMENT">
+            <name>
+              <value>Method</value>
+            </name>
+            <value xsi:type="DV_CODED_TEXT">
+              <value>[[Method_7:::CODEDTEXT_VALUE]]</value>
+              <defining_code>
+                <terminology_id>
+                  <value>local</value>
+                </terminology_id>
+                <code_string>[[Method_7:::CODEDTEXT_CODE]]</code_string>
+              </defining_code>
+            </value>
+          </items>
+          <items archetype_node_id="at1038" xsi:type="ELEMENT">
+            <name>
+              <value>Mean arterial pressure formula</value>
+            </name>
+            <value xsi:type="DV_TEXT">
+              <value>[[Mean arterial pressure formula:::STRING]]</value>
+            </value>
+          </items>
+          <items archetype_node_id="at1054" xsi:type="ELEMENT">
+            <name>
+              <value>Systolic pressure formula</value>
+            </name>
+            <value xsi:type="DV_TEXT">
+              <value>[[Systolic pressure formula:::STRING]]</value>
+            </value>
+          </items>
+          <items archetype_node_id="at1055" xsi:type="ELEMENT">
+            <name>
+              <value>Diastolic pressure formula</value>
+            </name>
+            <value xsi:type="DV_TEXT">
+              <value>[[Diastolic pressure formula:::STRING]]</value>
+            </value>
+          </items>
+          <items archetype_node_id="at1010" xsi:type="ELEMENT">
+            <name>
+              <value>Diastolic endpoint</value>
+            </name>
+            <value xsi:type="DV_CODED_TEXT">
+              <value>[[Diastolic endpoint:::CODEDTEXT_VALUE]]</value>
+              <defining_code>
+                <terminology_id>
+                  <value>local</value>
+                </terminology_id>
+                <code_string>[[Diastolic endpoint:::CODEDTEXT_CODE]]</code_string>
+              </defining_code>
+            </value>
+          </items><!-- SLOT IN /protocol[at0011]/items[at1025] NOT PROCESSED --><!-- SLOT IN /protocol[at0011]/items[at1058] NOT PROCESSED -->
+        </protocol>
+        <data archetype_node_id="at0001" xsi:type="HISTORY">
+          <name>
+            <value>history</value>
+          </name>
+          <origin xsi:type="DV_DATE_TIME">
+            <value>[[history_8.origin:::DATETIME]]</value>
+          </origin>
+          <events archetype_node_id="at0006" xsi:type="POINT_EVENT">
+            <name>
+              <value>Any event</value>
+            </name>
+            <time xsi:type="DV_DATE_TIME">
+              <value>[[Any event_9.time:::DATETIME]]</value>
+            </time>
+            <data archetype_node_id="at0003" xsi:type="ITEM_TREE">
+              <name>
+                <value>blood pressure</value>
+              </name>
+              <items archetype_node_id="at0004" xsi:type="ELEMENT">
+                <name>
+                  <value>Systolic</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Systolic:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Systolic:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0005" xsi:type="ELEMENT">
+                <name>
+                  <value>Diastolic</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Diastolic:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Diastolic:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0033" xsi:type="ELEMENT">
+                <name>
+                  <value>Comment</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Comment:::STRING]]</value>
+                </value>
+              </items>
+            </data>
+            <state archetype_node_id="at0007" xsi:type="ITEM_TREE">
+              <name>
+                <value>state structure</value>
+              </name>
+              <items archetype_node_id="at0008" xsi:type="ELEMENT">
+                <name>
+                  <value>Position</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Position_10:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Position_10:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at1052" xsi:type="ELEMENT">
+                <name>
+                  <value>Confounding factors</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Confounding factors_11:::STRING]]</value>
+                </value>
+              </items><!-- SLOT IN /data[at0001]/events[at0006]/state[at0007]/items[at1030] NOT PROCESSED -->
+              <items archetype_node_id="at1043" xsi:type="ELEMENT">
+                <name>
+                  <value>Sleep status</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Sleep status:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Sleep status:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at1005" xsi:type="ELEMENT">
+                <name>
+                  <value>Tilt</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Tilt:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Tilt:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+            </state>
+          </events>
+        </data>
+      </items>
+      <items archetype_node_id="openEHR-EHR-OBSERVATION.body_temperature.v2" xsi:type="OBSERVATION">
+        <name>
+          <value>Body temperature</value>
+        </name>
+        <language>
+          <terminology_id>
+            <value>ISO_639-1</value>
+          </terminology_id>
+          <code_string>en</code_string>
+        </language>
+        <encoding>
+          <terminology_id>
+            <value>Unicode</value>
+          </terminology_id>
+          <code_string>UTF-8</code_string>
+        </encoding>
+        <subject xsi:type="PARTY_SELF" />
+        <protocol archetype_node_id="at0020" xsi:type="ITEM_TREE">
+          <name>
+            <value>Protocol</value>
+          </name>
+          <items archetype_node_id="at0021" xsi:type="ELEMENT">
+            <name>
+              <value>Location of measurement</value>
+            </name>
+            <value xsi:type="DV_CODED_TEXT">
+              <value>[[Location of measurement_12:::CODEDTEXT_VALUE]]</value>
+              <defining_code>
+                <terminology_id>
+                  <value>local</value>
+                </terminology_id>
+                <code_string>[[Location of measurement_12:::CODEDTEXT_CODE]]</code_string>
+              </defining_code>
+            </value>
+          </items><!-- SLOT IN /protocol[at0020]/items[at0064] NOT PROCESSED --><!-- SLOT IN /protocol[at0020]/items[at0059] NOT PROCESSED --><!-- SLOT IN /protocol[at0020]/items[at0062] NOT PROCESSED -->
+        </protocol>
+        <data archetype_node_id="at0002" xsi:type="HISTORY">
+          <name>
+            <value>History</value>
+          </name>
+          <origin xsi:type="DV_DATE_TIME">
+            <value>[[History.origin:::DATETIME]]</value>
+          </origin>
+          <events archetype_node_id="at0003" xsi:type="POINT_EVENT">
+            <name>
+              <value>Any event</value>
+            </name>
+            <time xsi:type="DV_DATE_TIME">
+              <value>[[Any event_13.time:::DATETIME]]</value>
+            </time>
+            <data archetype_node_id="at0001" xsi:type="ITEM_TREE">
+              <name>
+                <value>Tree</value>
+              </name>
+              <items archetype_node_id="at0004" xsi:type="ELEMENT">
+                <name>
+                  <value>Temperature</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Temperature:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Temperature:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0063" xsi:type="ELEMENT">
+                <name>
+                  <value>Comment</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Comment_14:::STRING]]</value>
+                </value>
+              </items>
+            </data>
+            <state archetype_node_id="at0029" xsi:type="ITEM_TREE">
+              <name>
+                <value>State</value>
+              </name>
+              <items archetype_node_id="at0065" xsi:type="ELEMENT">
+                <name>
+                  <value>Current day of menstrual cycle</value>
+                </name>
+                <value xsi:type="DV_COUNT">
+                  <magnitude>[[Current day of menstrual cycle:::INTEGER]]</magnitude>
+                </value>
+              </items><!-- SLOT IN /data[at0002]/events[at0003]/state[at0029]/items[at0056] NOT PROCESSED --><!-- SLOT IN /data[at0002]/events[at0003]/state[at0029]/items[at0057] NOT PROCESSED -->
+            </state>
+          </events>
+        </data>
+      </items>
+      <items archetype_node_id="openEHR-EHR-OBSERVATION.body_weight.v1" xsi:type="OBSERVATION">
+        <name>
+          <value>Body weight</value>
+        </name>
+        <language>
+          <terminology_id>
+            <value>ISO_639-1</value>
+          </terminology_id>
+          <code_string>en</code_string>
+        </language>
+        <encoding>
+          <terminology_id>
+            <value>Unicode</value>
+          </terminology_id>
+          <code_string>UTF-8</code_string>
+        </encoding>
+        <subject xsi:type="PARTY_SELF" />
+        <protocol archetype_node_id="at0015" xsi:type="ITEM_TREE">
+          <name>
+            <value>protocol structure</value>
+          </name><!-- SLOT IN /protocol[at0015]/items[at0020] NOT PROCESSED -->
+        </protocol>
+        <data archetype_node_id="at0002" xsi:type="HISTORY">
+          <name>
+            <value>history</value>
+          </name>
+          <origin xsi:type="DV_DATE_TIME">
+            <value>[[history_15.origin:::DATETIME]]</value>
+          </origin>
+          <events archetype_node_id="at0003" xsi:type="POINT_EVENT">
+            <name>
+              <value>Any event</value>
+            </name>
+            <time xsi:type="DV_DATE_TIME">
+              <value>[[Any event_16.time:::DATETIME]]</value>
+            </time>
+            <data archetype_node_id="at0001" xsi:type="ITEM_TREE">
+              <name>
+                <value>Simple</value>
+              </name>
+              <items archetype_node_id="at0004" xsi:type="ELEMENT">
+                <name>
+                  <value>Weight</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Weight:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Weight:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0024" xsi:type="ELEMENT">
+                <name>
+                  <value>Comment</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Comment_17:::STRING]]</value>
+                </value>
+              </items>
+            </data>
+            <state archetype_node_id="at0008" xsi:type="ITEM_TREE">
+              <name>
+                <value>state structure</value>
+              </name>
+              <items archetype_node_id="at0009" xsi:type="ELEMENT">
+                <name>
+                  <value>State of Dress</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[State of Dress:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[State of Dress:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at0025" xsi:type="ELEMENT">
+                <name>
+                  <value>Confounding Factors</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Confounding Factors:::STRING]]</value>
+                </value>
+              </items>
+            </state>
+          </events>
+        </data>
+      </items>
+      <items archetype_node_id="openEHR-EHR-OBSERVATION.height.v1" xsi:type="OBSERVATION">
+        <name>
+          <value>Height/Length</value>
+        </name>
+        <language>
+          <terminology_id>
+            <value>ISO_639-1</value>
+          </terminology_id>
+          <code_string>en</code_string>
+        </language>
+        <encoding>
+          <terminology_id>
+            <value>Unicode</value>
+          </terminology_id>
+          <code_string>UTF-8</code_string>
+        </encoding>
+        <subject xsi:type="PARTY_SELF" />
+        <protocol archetype_node_id="at0007" xsi:type="ITEM_TREE">
+          <name>
+            <value>List</value>
+          </name><!-- SLOT IN /protocol[at0007]/items[at0011] NOT PROCESSED -->
+        </protocol>
+        <data archetype_node_id="at0001" xsi:type="HISTORY">
+          <name>
+            <value>history</value>
+          </name>
+          <origin xsi:type="DV_DATE_TIME">
+            <value>[[history_18.origin:::DATETIME]]</value>
+          </origin>
+          <events archetype_node_id="at0002" xsi:type="POINT_EVENT">
+            <name>
+              <value>Any event</value>
+            </name>
+            <time xsi:type="DV_DATE_TIME">
+              <value>[[Any event_19.time:::DATETIME]]</value>
+            </time>
+            <data archetype_node_id="at0003" xsi:type="ITEM_TREE">
+              <name>
+                <value>Simple</value>
+              </name>
+              <items archetype_node_id="at0004" xsi:type="ELEMENT">
+                <name>
+                  <value>Height/Length</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[Height/Length:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[Height/Length:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0018" xsi:type="ELEMENT">
+                <name>
+                  <value>Comment</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Comment_20:::STRING]]</value>
+                </value>
+              </items>
+            </data>
+            <state archetype_node_id="at0013" xsi:type="ITEM_TREE">
+              <name>
+                <value>Tree</value>
+              </name>
+              <items archetype_node_id="at0014" xsi:type="ELEMENT">
+                <name>
+                  <value>Position</value>
+                </name>
+                <value xsi:type="DV_CODED_TEXT">
+                  <value>[[Position_21:::CODEDTEXT_VALUE]]</value>
+                  <defining_code>
+                    <terminology_id>
+                      <value>local</value>
+                    </terminology_id>
+                    <code_string>[[Position_21:::CODEDTEXT_CODE]]</code_string>
+                  </defining_code>
+                </value>
+              </items>
+              <items archetype_node_id="at0019" xsi:type="ELEMENT">
+                <name>
+                  <value>Confounding factors</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Confounding factors_22:::STRING]]</value>
+                </value>
+              </items>
+            </state>
+          </events>
+        </data>
+      </items>
+      <items archetype_node_id="openEHR-EHR-OBSERVATION.indirect_oximetry.v0" xsi:type="OBSERVATION">
+        <name>
+          <value>Indirect oximetry</value>
+        </name>
+        <language>
+          <terminology_id>
+            <value>ISO_639-1</value>
+          </terminology_id>
+          <code_string>en</code_string>
+        </language>
+        <encoding>
+          <terminology_id>
+            <value>Unicode</value>
+          </terminology_id>
+          <code_string>UTF-8</code_string>
+        </encoding>
+        <subject xsi:type="PARTY_SELF" />
+        <protocol archetype_node_id="at0007" xsi:type="ITEM_TREE">
+          <name>
+            <value>List</value>
+          </name>
+          <items archetype_node_id="at0009" xsi:type="ELEMENT">
+            <name>
+              <value>Sensor site</value>
+            </name>
+            <value xsi:type="DV_TEXT">
+              <value>[[Sensor site:::STRING]]</value>
+            </value>
+          </items>
+          <items archetype_node_id="at0020" xsi:type="ELEMENT">
+            <name>
+              <value>Sensor type</value>
+            </name>
+            <value xsi:type="DV_CODED_TEXT">
+              <value>[[Sensor type:::CODEDTEXT_VALUE]]</value>
+              <defining_code>
+                <terminology_id>
+                  <value>local</value>
+                </terminology_id>
+                <code_string>[[Sensor type:::CODEDTEXT_CODE]]</code_string>
+              </defining_code>
+            </value>
+          </items>
+          <items archetype_node_id="at0037" xsi:type="ELEMENT">
+            <name>
+              <value>X - Electrode operating temperature</value>
+            </name>
+            <value xsi:type="DV_QUANTITY">
+              <magnitude>[[X - Electrode operating temperature:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+              <units>[[X - Electrode operating temperature:::DV_QUANTITY_UNITS]]</units>
+            </value>
+          </items>
+          <items archetype_node_id="at0038" xsi:type="ELEMENT">
+            <name>
+              <value>X - Time of sensor application</value>
+            </name>
+            <value xsi:type="DV_DATE_TIME">
+              <value>[[X - Time of sensor application:::DATETIME]]</value>
+            </value>
+          </items><!-- SLOT IN /protocol[at0007]/items[at0018] NOT PROCESSED --><!-- SLOT IN /protocol[at0007]/items[at0059] NOT PROCESSED -->
+        </protocol>
+        <data archetype_node_id="at0001" xsi:type="HISTORY">
+          <name>
+            <value>Event Series</value>
+          </name>
+          <origin xsi:type="DV_DATE_TIME">
+            <value>[[Event Series.origin:::DATETIME]]</value>
+          </origin>
+          <events archetype_node_id="at0002" xsi:type="POINT_EVENT">
+            <name>
+              <value>Any event</value>
+            </name>
+            <time xsi:type="DV_DATE_TIME">
+              <value>[[Any event_23.time:::DATETIME]]</value>
+            </time>
+            <data archetype_node_id="at0003" xsi:type="ITEM_TREE">
+              <name>
+                <value>Tree</value>
+              </name>
+              <items archetype_node_id="at0006" xsi:type="ELEMENT">
+                <name>
+                  <value>spO2</value>
+                </name>
+                <value xsi:type="DV_PROPORTION">
+                  <numerator>[[spO2:::DV_PROPORTION_NUMERATOR]]</numerator>
+                  <denominator>[[spO2:::DV_PROPORTION_DENOMINATOR]]</denominator>
+                  <type>[[spO2:::DV_PROPORTION_TYPE]]</type>
+                  <precision>[[spO2:::DV_PROPORTION_PRECISION]]</precision>
+                </value>
+              </items>
+              <items archetype_node_id="at0044" xsi:type="ELEMENT">
+                <name>
+                  <value>spOC</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[spOC:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[spOC:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0045" xsi:type="ELEMENT">
+                <name>
+                  <value>spCO</value>
+                </name>
+                <value xsi:type="DV_PROPORTION">
+                  <numerator>[[spCO:::DV_PROPORTION_NUMERATOR]]</numerator>
+                  <denominator>[[spCO:::DV_PROPORTION_DENOMINATOR]]</denominator>
+                  <type>[[spCO:::DV_PROPORTION_TYPE]]</type>
+                  <precision>[[spCO:::DV_PROPORTION_PRECISION]]</precision>
+                </value>
+              </items>
+              <items archetype_node_id="at0046" xsi:type="ELEMENT">
+                <name>
+                  <value>spMet</value>
+                </name>
+                <value xsi:type="DV_PROPORTION">
+                  <numerator>[[spMet:::DV_PROPORTION_NUMERATOR]]</numerator>
+                  <denominator>[[spMet:::DV_PROPORTION_DENOMINATOR]]</denominator>
+                  <type>[[spMet:::DV_PROPORTION_TYPE]]</type>
+                  <precision>[[spMet:::DV_PROPORTION_PRECISION]]</precision>
+                </value>
+              </items>
+              <items archetype_node_id="at0039" xsi:type="ELEMENT">
+                <name>
+                  <value>X - ptcO2</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[X - ptcO2:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[X - ptcO2:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items>
+              <items archetype_node_id="at0040" xsi:type="ELEMENT">
+                <name>
+                  <value>X - ptcCO2</value>
+                </name>
+                <value xsi:type="DV_QUANTITY">
+                  <magnitude>[[X - ptcCO2:::DV_QUANTITY_MAGNITUDE]]</magnitude>
+                  <units>[[X - ptcCO2:::DV_QUANTITY_UNITS]]</units>
+                </value>
+              </items><!-- SLOT IN /data[at0001]/events[at0002]/data[at0003]/items[at0054] NOT PROCESSED -->
+              <items archetype_node_id="at0019" xsi:type="ELEMENT">
+                <name>
+                  <value>Multimedia image</value>
+                </name>
+                <value xsi:type="DV_MULTIMEDIA">
+                  <data>[[Multimedia image:::DV_MULTIMEDIA_DATA]]</data>
+                  <media_type>
+                    <terminology_id>
+                      <value>IANA_media-types</value>
+                    </terminology_id>
+                    <code_string>[[Multimedia image:::DV_MULTIMEDIA_MEDIATYPE]]</code_string>
+                  </media_type>
+                  <size>[[Multimedia image:::DV_MULTIMEDIA_SIZE]]</size>
+                </value>
+              </items>
+              <items archetype_node_id="at0058" xsi:type="ELEMENT">
+                <name>
+                  <value>Interpretation</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Interpretation:::STRING]]</value>
+                </value>
+              </items>
+            </data>
+            <state archetype_node_id="at0014" xsi:type="ITEM_TREE">
+              <name>
+                <value>Tree</value>
+              </name><!-- SLOT IN /data[at0001]/events[at0002]/state[at0014]/items[at0034] NOT PROCESSED --><!-- SLOT IN /data[at0001]/events[at0002]/state[at0014]/items[at0015] NOT PROCESSED -->
+              <items archetype_node_id="at0016" xsi:type="ELEMENT">
+                <name>
+                  <value>Confounding factors</value>
+                </name>
+                <value xsi:type="DV_TEXT">
+                  <value>[[Confounding factors_24:::STRING]]</value>
+                </value>
+              </items>
+            </state>
+          </events>
+        </data>
+      </items><!-- SLOT IN /items[at0002] NOT PROCESSED -->
+    </content>
+  </data>
+  <lifecycle_state>
+    <value>complete</value>
+    <defining_code>
+      <terminology_id>
+        <value>openehr</value>
+      </terminology_id>
+      <code_string>532</code_string>
+    </defining_code>
+  </lifecycle_state>
+</version>
