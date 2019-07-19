@@ -14,9 +14,13 @@
     "async": "^3.1.0",
     "bunyan": "^1.8.12",
     "dotenv": "^8.0.0",
+    "moment": "^2.24.0",
     "restify": "^8.3.3",
     "restify-cors-middleware": "^1.1.1",
-    "restify-router": "^0.5.1"
+    "restify-router": "^0.5.1",
+    "uuid": "^3.3.2",
+    "xmldom": "^0.1.27",
+    "xpath": "0.0.27"
   },
   "devDependencies": {
     "chai": "^4.2.0",

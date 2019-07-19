@@ -1,5 +1,6 @@
 const fs = require("fs");
 const {exec} = require("child_process");
+const merge = require("../handlers/merge-utils");
 
 function opt2html(uid, cb) {
     exec(
@@ -33,4 +34,8 @@ function validateInstance(uid, cb) {
 	);
 }
 
-module.exports = {opt2html, opt2contribution, validateInstance};
+function mergeContribution(body, cb) {
+    merge(body, cb);
+}
+
+module.exports = {opt2html, opt2contribution, validateInstance, mergeContribution};
