@@ -4,7 +4,8 @@ const xpath = require('xpath');
 const async = require("async");
 const uuidv4 = require('uuid/v4');
 const moment = require('moment');
-const dateFormat = "YYYYMMDD'T'HHmmss,SSSZ";
+const fs = require('fs');
+const dateFormat = "YYYYMMDDTHHmmss,SSSZZ";
 const namespaces = {
     "version": "http://schemas.openehr.org/v1",
     "xsi": "http://www.w3.org/2001/XMLSchema-instance"
@@ -26,20 +27,38 @@ const mergeContribution = (body, cb) => {
         queryBase = "//version:data/version:content";
     }
 
-    let keys = Object.keys(paths);
-    async.each(keys, (key, callback) => {
+    async.eachLimit(paths, 1, (entry, callback) => {
 
-        let entry = paths[key];
+        let path = entry.path;
         let type = entry.type;
         let value = entry.value;
 
-        let selectArray = select(queryBase + formatPath(key), xmlDoc);
+        let selectArray = select(queryBase + formatPath(path), xmlDoc);
         let node;
 
         if (selectArray.length > 0) {
-            node = selectArray[0];
-            replaceValue(node, type, value);
-            callback();
+            if (selectArray.length > 1) {
+                /*console.log("-----------------------------");
+                console.log("Found collision ");
+                console.log(selectArray.length);
+                console.log(path);
+                console.log(type);
+                console.log(value);*/
+                let i;
+                for (i = 0; i < selectArray.length; i++) {
+                    if (isEmpty(selectArray[i], type)) {
+                        replaceValue(selectArray[i], type, value);
+                        //console.log(`Replaced item - ${i}`);
+                        //console.log("-----------------------------");
+                        i = selectArray.length
+                    }
+                }
+                callback();
+            } else {
+                node = selectArray[0];
+                replaceValue(node, type, value);
+                callback();
+            }
         } else {
             callback('`Path not found: /n${key}`');
         }
@@ -49,7 +68,8 @@ const mergeContribution = (body, cb) => {
             cb(err);
         } else {
             setMetadata(xmlDoc, meta, select);
-            cb(null, new XMLSerializer().serializeToString(xmlDoc));
+            let string = new XMLSerializer().serializeToString(xmlDoc);
+            cb(null, string);
         }
     });
 };
@@ -83,7 +103,7 @@ const setContributionMeta = (xmlDoc, meta, select) => {
 
     let versionIdNode = select("//version:uid/version:value", xmlDoc);
     //console.log(versionIdNode[0].firstChild.data);
-    versionIdNode[0].firstChild.data = uuidv4();
+    versionIdNode[0].firstChild.data = uuidv4() + '::EMR_APP::1';
 
     let composerIdNode = select("//version:data/version:composer/version:external_ref/version:id/version:value", xmlDoc);
     //console.log(composerIdNode[0].firstChild.data);
@@ -117,6 +137,38 @@ const setOriginHistoryMeta = (xmlDoc, select) => {
         //console.log(node.childNodes[1].firstChild.data);
         node.childNodes[1].firstChild.data = moment().format(dateFormat).toString();
     });
+};
+
+const isEmpty = (node, type) => {
+    switch (type) {
+        case 'DV_TEXT':
+            //console.log(`DV_TEXT ${node.childNodes[1].firstChild.data}`);
+            return node.childNodes[1].firstChild.data.toString().includes("DV_TEXT");
+        case 'DV_COUNT':
+            //console.log(`DV_COUNT ${node.childNodes[1].firstChild.data}`);
+            return node.childNodes[1].firstChild.data.toString().includes("DV_COUNT");
+        case 'DV_DATE_TIME':
+            //console.log(`DV_DATE_TIME ${node.childNodes[1].firstChild.data}`);
+            return node.childNodes[1].firstChild.data.toString().includes("DV_DATE_TIME");
+        case 'DV_QUANTITY':
+            //console.log(`DV_QUANTITY ${node.firstChild.data}`);
+            return node.firstChild.data.toString().includes("DV_QUANTITY");
+        case 'DV_CODED_TEXT':
+            //console.log(`DV_CODED_TEXT ${node.childNodes[3].firstChild.data}`);
+            //console.log(`DV_CODED_TEXT ${node.parentNode.childNodes[1].firstChild.data}`);
+            return (node.childNodes[3].firstChild.data.toString().includes("CODEDTEXT_CODE") ||
+                node.parentNode.childNodes[1].firstChild.data.toString().includes("CODEDTEXT_VALUE"));
+        case 'DV_PROPORTION':
+            //console.log(`DV_PROPORTION ${node.firstChild.data}`);
+            return node.firstChild.data.toString().includes("DV_PROPORTION");
+        case 'DV_MULTIMEDIA':
+            //console.log(`DV_MULTIMEDIA ${node.childNodes[1].firstChild.data}`);
+            //console.log(`DV_MULTIMEDIA ${node.childNodes[3].childNodes[3].firstChild.data}`);
+            //console.log(`DV_MULTIMEDIA ${node.childNodes[5].firstChild.data}`);
+            return node.childNodes[1].firstChild.data.toString().includes("DV_MULTIMEDIA_DATA") ||
+                node.childNodes[3].childNodes[3].firstChild.data.toString().includes("DV_MULTIMEDIA_MEDIATYPE") ||
+                node.childNodes[5].firstChild.data.toString().includes("DV_MULTIMEDIA_SIZE");
+    }
 };
 
 const replaceValue = (node, type, value) => {
@@ -159,7 +211,7 @@ const replaceValue = (node, type, value) => {
             //console.log(`DV_MULTIMEDIA ${node.childNodes[5].firstChild.data}`);
             node.childNodes[1].firstChild.data = value.data;
             node.childNodes[3].childNodes[3].firstChild.data = value.type;
-            node.childNodes[5].firstChild.data = value.size;
+            node.childNodes[5].firstChild.data = value.size.toString();
             break;
     }
 };
