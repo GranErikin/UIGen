@@ -4,7 +4,6 @@ const xpath = require('xpath');
 const async = require("async");
 const uuidv4 = require('uuid/v4');
 const moment = require('moment');
-const fs = require('fs');
 const dateFormat = "YYYYMMDDTHHmmss,SSSZZ";
 const namespaces = {
     "version": "http://schemas.openehr.org/v1",
@@ -38,19 +37,11 @@ const mergeContribution = (body, cb) => {
 
         if (selectArray.length > 0) {
             if (selectArray.length > 1) {
-                /*console.log("-----------------------------");
-                console.log("Found collision ");
-                console.log(selectArray.length);
-                console.log(path);
-                console.log(type);
-                console.log(value);*/
                 let i;
                 for (i = 0; i < selectArray.length; i++) {
                     if (isEmpty(selectArray[i], type)) {
                         replaceValue(selectArray[i], type, value);
-                        //console.log(`Replaced item - ${i}`);
-                        //console.log("-----------------------------");
-                        i = selectArray.length
+                        i = selectArray.length;
                     }
                 }
                 callback();

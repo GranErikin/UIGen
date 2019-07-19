@@ -24,7 +24,7 @@ const cors = corsMiddleware({
     origins: ['*'],
     allowHeaders: [],
     exposeHeaders: []
-})
+});
    
 server.pre(cors.preflight);
 server.use(cors.actual);

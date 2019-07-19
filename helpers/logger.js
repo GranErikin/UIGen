@@ -1,5 +1,4 @@
 const bunyan = require('bunyan');
-const fs = require('fs');
 
 module.exports = bunyan.createLogger({
 	name: 'OPTConvertionService',

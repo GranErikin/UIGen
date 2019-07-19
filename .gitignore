@@ -8,3 +8,6 @@ opt
 instance
 logs
 .nyc_output
+
+# IDE
+.idea
