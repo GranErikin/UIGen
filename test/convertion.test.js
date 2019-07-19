@@ -15,7 +15,7 @@ let optError = fs.readFileSync("./test/vital_signs_summary.en.v1.error.opt");
 describe("/POST opt2html", () => {
     it("it should NOT convert the opt to HTML form", (done) => {
         chai.request(server)
-            .post("/opt2html/testuid")
+            .post("/opt2html")
             .set('Content-Type', 'application/xml')
             .send(optError)
             .end((err, res) => {
@@ -29,7 +29,7 @@ describe("/POST opt2html", () => {
     });
     it("it should convert the opt to HTML form", (done) => {
         chai.request(server)
-            .post("/opt2html/testuid")
+            .post("/opt2html")
             .set('Content-Type', 'application/xml')
             .send(opt)
             .end((err, res) => {
@@ -47,7 +47,7 @@ describe("/POST opt2html", () => {
 describe("/POST opt2contribution", () => {
     it("it should NOT convert the opt to XML Tagged Contribution", (done) => {
         chai.request(server)
-            .post("/opt2contribution/testuid")
+            .post("/opt2contribution")
             .set('Content-Type', 'application/xml')
             .send(optError)
             .end((err, res) => {
@@ -61,7 +61,7 @@ describe("/POST opt2contribution", () => {
     });
     it("it should convert the opt to XML Tagged Contribution", (done) => {
         chai.request(server)
-            .post("/opt2contribution/testuid")
+            .post("/opt2contribution")
             .set('Content-Type', 'application/xml')
             .send(opt)
             .end((err, res) => {
@@ -79,7 +79,7 @@ describe("/POST opt2contribution", () => {
 describe("/POST opt2bundle", () => {
     it("it should NOT convert the opt to HTML and XML Bundle", (done) => {
         chai.request(server)
-            .post("/opt2bundle/testuid")
+            .post("/opt2bundle")
             .set('Content-Type', 'application/xml')
             .send(optError)
             .end((err, res) => {
@@ -93,7 +93,7 @@ describe("/POST opt2bundle", () => {
     });
     it("it should convert the opt to HTML and XML Bundle", (done) => {
         chai.request(server)
-            .post("/opt2bundle/testuid")
+            .post("/opt2bundle")
             .set('Content-Type', 'application/xml')
             .send(opt)
             .end((err, res) => {

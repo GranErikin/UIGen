@@ -9,10 +9,10 @@ router.use((req, res, next) => {
 	next();
 });
 
-router.post("/opt2html/:uid", [utils.writeFile, converters.opt2html]);
-router.post("/opt2contribution/:uid", [utils.writeFile, converters.opt2contribution]);
-router.post("/opt2bundle/:uid", [utils.writeFile, converters.opt2bundle]);
-router.post("/validate/instance/:uid", [utils.writeFile, utils.validateInstance]);
+router.post("/opt2html", [utils.writeFile, converters.opt2html]);
+router.post("/opt2contribution", [utils.writeFile, converters.opt2contribution]);
+router.post("/opt2bundle", [utils.writeFile, converters.opt2bundle]);
+router.post("/validate/instance", [utils.writeFile, utils.validateInstance]);
 router.post("/merge/contribution", [converters.mergeContribution]);
 
 module.exports = router;

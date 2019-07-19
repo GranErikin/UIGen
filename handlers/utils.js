@@ -3,7 +3,7 @@ const utils = require("../helpers/utils");
 const opt = require("../gateways/opt");
 function writeFile (req, res, next) {
 
-	let uid = req.params.uid;
+	let uid = req.params.uid = Math.random().toString(36).slice(2);
 	let xml = req.body;
 
 	fs.writeFile(`./${req.fileType}/${uid}.xml`, xml, function (err) {

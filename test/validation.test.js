@@ -15,7 +15,7 @@ let instanceError = fs.readFileSync("./test/instance.error.xml");
 describe("/POST validate/instance", () => {
     it("XML should be NOT VALID", (done) => {
         chai.request(server)
-            .post("/validate/instance/testuid")
+            .post("/validate/instance")
             .set('Content-Type', 'application/xml')
             .send(instanceError)
             .end((err, res) => {
@@ -31,7 +31,7 @@ describe("/POST validate/instance", () => {
     });
     it("XML should be VALID", (done) => {
         chai.request(server)
-            .post("/validate/instance/testuid")
+            .post("/validate/instance")
             .set('Content-Type', 'application/xml')
             .send(instance)
             .end((err, res) => {
