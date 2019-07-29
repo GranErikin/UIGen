@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test';
 
-const fs = require("fs")
+const fs = require("fs");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../index");
@@ -10,6 +10,7 @@ chai.use(chaiHttp);
 
 let instance = fs.readFileSync("./test/instance.xml");
 let instanceError = fs.readFileSync("./test/instance.error.xml");
+
 
 //TODO: Implement file creation validation
 describe("/POST validate/instance", () => {
@@ -28,7 +29,8 @@ describe("/POST validate/instance", () => {
 				res.body.data.results.should.be.a("array");
                 done();
           });
-    });
+    }).timeout(10000);
+
     it("XML should be VALID", (done) => {
         chai.request(server)
             .post("/validate/instance")
@@ -43,5 +45,5 @@ describe("/POST validate/instance", () => {
 				res.body.data.valid.should.to.equal(true);
                 done();
           });
-    });
+    }).timeout(10000);
 });

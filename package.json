@@ -1,5 +1,5 @@
 {
-  "name": "uigen",
+  "name": "opt-utils",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,6 +15,7 @@
     "bunyan": "^1.8.12",
     "dotenv": "^8.0.0",
     "moment": "^2.24.0",
+    "request": "^2.88.0",
     "restify": "^8.3.3",
     "restify-cors-middleware": "^1.1.1",
     "restify-router": "^0.5.1",
@@ -27,6 +28,8 @@
     "chai-http": "^4.3.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1",
-    "nyc": "^14.1.1"
+    "nyc": "^14.1.1",
+    "superagent": "^5.1.0",
+    "supertest": "^4.0.2"
   }
 }
