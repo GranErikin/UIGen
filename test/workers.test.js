@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test';
 
-const getEHRServerToken = require('../workers/index').getEHRServerToken;
+const getEHRServerToken = require('../gateways/ehr').getEHRServerToken;
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 
