@@ -20,6 +20,7 @@
     "restify": "^8.3.3",
     "restify-cors-middleware": "^1.1.1",
     "restify-router": "^0.5.1",
+    "tmp": "^0.1.0",
     "uuid": "^3.3.2",
     "xmldom": "^0.1.27",
     "xpath": "0.0.27"

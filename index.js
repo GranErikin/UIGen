@@ -6,17 +6,12 @@ const corsMiddleware = require("restify-cors-middleware");
 const utils = require("./handlers/utils");
 const logger = require("./helpers/logger");
 const routes = require("./routes");
+require("./topics");
 
 const server = restify.createServer({
     name: "OPT Convertion Service",
     version: "1.0.0",
     log: logger
-});
-
-let folders = ['opt', 'instance'];
-folders.forEach((folder) => {
-    if (!fs.existsSync(folder))
-        fs.mkdirSync(folder);
 });
 
 const cors = corsMiddleware({

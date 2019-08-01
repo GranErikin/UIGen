@@ -1,20 +1,13 @@
 const fs = require("fs");
 const utils = require("../helpers/utils");
 const opt = require("../gateways/opt");
+const fileUtils = require("../utils/file");
+
 function writeFile (req, res, next) {
-
-	let uid = req.params.uid = Math.random().toString(36).slice(2);
 	let xml = req.body;
-
-	fs.writeFile(`./${req.fileType}/${uid}.xml`, xml, function (err) {
-        if (err) {
-            res.send(500, utils.buildRespose(false, null, "ERROR_FILE_WRITE"));
-            return next(err);
-		}
-		next();
-	});
-
-};
+	req.params.filePath = fileUtils.writeTmpFileSync(xml);
+	next();
+}
 
 function logRequestPayload (req, res, next) {
     if(["development","test"].includes(process.env.NODE_ENV)){
@@ -25,8 +18,8 @@ function logRequestPayload (req, res, next) {
 }
 
 function validateInstance( req, res, next) {
-	let uid = req.params.uid;
-	opt.validateInstance(uid,(err, response) => {
+	let path = req.params.filePath;
+	opt.validateInstance(path,(err, response) => {
 		let results = response.split('\n');
 		results.pop();
 		let code = 200;

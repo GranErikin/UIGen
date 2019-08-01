@@ -3,8 +3,8 @@ const opt = require("../gateways/opt");
 const utils = require("../helpers/utils");
 
 function opt2html(req, res, next) {
-    let uid = req.params.uid;
-    opt.opt2html(uid, (err, html) => {
+    let path = req.params.filePath;
+    opt.opt2html(path, (err, html) => {
         if (err) {
             res.send(500, utils.buildRespose(false, null, "ERROR_OPT_CONVERTION"));
             return next(err);
@@ -15,8 +15,8 @@ function opt2html(req, res, next) {
 };
 
 function opt2contribution(req, res, next) {
-    let uid = req.params.uid;
-    opt.opt2contribution(uid, (err, contribution) => {
+    let path = req.params.filePath;
+    opt.opt2contribution(path, (err, contribution) => {
         if (err) {
             res.send(500, utils.buildRespose(false, null, "ERROR_OPT_CONVERTION"));
             return next(err);
@@ -27,13 +27,13 @@ function opt2contribution(req, res, next) {
 };
 
 function opt2bundle(req, res, next) {
-    let uid = req.params.uid;
+    let path = req.params.filePath;
     async.parallel({
         html: (cb) => {
-            opt.opt2html(uid, cb);
+            opt.opt2html(path, cb);
         },
         contribution: (cb) => {
-            opt.opt2contribution(uid, cb);
+            opt.opt2contribution(path, cb);
         }
     }, (err, data) => {
         if (err) {

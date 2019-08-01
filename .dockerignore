@@ -1,9 +1,5 @@
 node_modules
 .env
 
-opt
-html
-contribution
-instance
 logs
 .nyc_output

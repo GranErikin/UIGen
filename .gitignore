@@ -2,10 +2,6 @@ node_modules
 .env
 
 # Generated files
-html
-contribution
-opt
-instance
 logs
 .nyc_output
 
