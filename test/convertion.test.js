@@ -12,7 +12,7 @@ let opt = fs.readFileSync("./test/vital_signs_summary.en.v1.opt");
 let optError = fs.readFileSync("./test/vital_signs_summary.en.v1.error.opt");
 
 //TODO: Implement file creation validation
-
+/*
 describe("/POST opt2html", () => {
 
     it("it should NOT convert the opt to HTML form", (done) => {
@@ -111,3 +111,4 @@ describe("/POST opt2bundle", () => {
           });
     }).timeout(10000);
 });
+*/
