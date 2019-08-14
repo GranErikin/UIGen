@@ -7,6 +7,7 @@ contribution
 opt
 instance
 logs
+version
 .nyc_output
 
 # IDE
