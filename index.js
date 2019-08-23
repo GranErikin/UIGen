@@ -5,10 +5,13 @@ const router = new (require('restify-router')).Router();
 const corsMiddleware = require("restify-cors-middleware");
 const utils = require("./handlers/utils");
 const logger = require("./helpers/logger");
-const routes = require("./routes");
+const routes = require("./src/routes");
+const WorkerClient = require("./src/workers/WorkerClient");
+const {TYPES} = require("./src/di/types");
+const container = require("./src/di/inversify.config");
 
 const server = restify.createServer({
-    name: "OPT Convertion Service",
+    name: "OPT-Utils",
     version: "1.0.0",
     log: logger
 });
@@ -25,7 +28,7 @@ const cors = corsMiddleware({
     allowHeaders: [],
     exposeHeaders: []
 });
-   
+
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.acceptParser(server.acceptable));
@@ -33,20 +36,23 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 server.use(utils.logRequestPayload);
 
-router.add("",routes);
+router.add("", routes);
 router.applyRoutes(server);
 
-server.on('after', restify.plugins.metrics({ server: server }, function onMetrics(err, metrics) {
+server.on('after', restify.plugins.metrics({server: server}, function onMetrics(err, metrics) {
     //logger.info(`${metrics.method} ${metrics.path} ${metrics.statusCode} ${metrics.latency} ms`);
     logger.info(metrics);
 }));
 
 server.on('uncaughtException', function (req, res, route, err) {
-	logger.error(err);
+    logger.error(err);
 });
 
 server.listen(process.env.PORT, function () {
     logger.info('%s listening at %s with %s', server.name, server.url, process.env.NODE_ENV);
 });
+
+let workerClient = container.get < WorkerClient > (TYPES.WorkerClient);
+workerClient.startClient();
 
 module.exports = server;

@@ -13,7 +13,7 @@ let instanceError = fs.readFileSync("./test/instance.error.xml");
 
 
 //TODO: Implement file creation validation
-
+/*
 describe("/POST validate/instance", () => {
     it("XML should be NOT VALID", (done) => {
         chai.request(server)
@@ -48,3 +48,4 @@ describe("/POST validate/instance", () => {
           });
     }).timeout(10000);
 });
+*/

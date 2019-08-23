@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" /><!-- simple style -->
+    <link rel="stylesheet" href="style.css" /><!-- boostrap style -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>sample template</h1>
+      <div class="COMPOSITION">
+        <label>Sample composition</label>
+        <div class="EVENT_CONTEXT">
+          <label />
+          <div class="ITEM_TREE">
+            <label>*Arbol(es)</label>
+          </div>
+        </div>
+        <div class="INSTRUCTION">
+          <label>Pedido</label>
+          <div class="ACTIVITY">
+            <label>Current Activity</label>
+            <div class="ITEM_TREE">
+              <label>Arbol</label>
+              <div class="ELEMENT form-group row">
+                <label class="col-md-2 col-form-label">Servicio pedido</label>
+                <select name="/activities[at0001]/description[at0002]/items[at0003]/value/defining_code" class="DV_CODED_TEXT form-control">
+                  <option value=""></option>
+                </select>
+              </div>
+              <div class="ELEMENT form-group row">
+                <label class="col-md-2 col-form-label">Duración</label>
+                <label>D
+                  <input type="number" name="/activities[at0001]/description[at0002]/items[at0004]/value/D" class="small DV_DURATION form-control" />
+                </label>
+                <label>H
+                  <input type="number" name="/activities[at0001]/description[at0002]/items[at0004]/value/H" class="small DV_DURATION form-control" />
+                </label>
+                <label>M
+                  <input type="number" name="/activities[at0001]/description[at0002]/items[at0004]/value/M" class="small DV_DURATION form-control" />
+                </label>
+                <label>S
+                  <input type="number" name="/activities[at0001]/description[at0002]/items[at0004]/value/S" class="small DV_DURATION form-control" />
+                </label>
+              </div>
+              <div class="ELEMENT form-group row">
+                <label class="col-md-2 col-form-label">Urgente</label>
+                <input type="checkbox" name="/activities[at0001]/description[at0002]/items[at0005]/value" class="DV_BOOLEAN" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
