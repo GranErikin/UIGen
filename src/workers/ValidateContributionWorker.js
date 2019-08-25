@@ -15,14 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Worker_1 = require("./Worker");
 const WorkerExceptions_1 = require("./exceptions/WorkerExceptions");
 const camunda_external_task_client_js_1 = require("camunda-external-task-client-js");
+const OPTService_1 = require("../opt/OPTService");
 const inversify_1 = require("inversify");
 const types_1 = require("../di/types");
-const OPTService_1 = require("../opt/OPTService");
-let OPT2HTMLWorker = class OPT2HTMLWorker extends Worker_1.Worker {
+let ValidateContributionWorker = class ValidateContributionWorker extends Worker_1.Worker {
     constructor(optService, workerLogger) {
         super(workerLogger);
-        this.topic = "optToHtml";
-        this.variableNames = ["template"];
+        this.topic = "validateContribution";
+        this.variableNames = ["mergedContribution"];
         this.optService = optService;
     }
     validateInput() {
@@ -31,11 +31,11 @@ let OPT2HTMLWorker = class OPT2HTMLWorker extends Worker_1.Worker {
     work(params) {
         return new Promise((resolve, reject) => {
             try {
-                this.optService.opt2html(params.template).then((html) => {
+                this.optService.validateInstance(params.mergedContribution).then((isValid) => {
                     const processVariables = new camunda_external_task_client_js_1.Variables();
-                    processVariables.setTyped("html", {
-                        value: html,
-                        type: "string",
+                    processVariables.setTyped("isContributionValid", {
+                        value: isValid,
+                        type: "boolean",
                         valueInfo: {
                             transient: true
                         }
@@ -56,10 +56,10 @@ let OPT2HTMLWorker = class OPT2HTMLWorker extends Worker_1.Worker {
         });
     }
 };
-OPT2HTMLWorker = __decorate([
+ValidateContributionWorker = __decorate([
     __param(0, inversify_1.inject(types_1.TYPES.OPTService)),
     __param(1, inversify_1.inject(types_1.TYPES.Logger)), __param(1, inversify_1.named("workerLogger")),
     __metadata("design:paramtypes", [OPTService_1.OPTService, Object])
-], OPT2HTMLWorker);
-exports.OPT2HTMLWorker = OPT2HTMLWorker;
-//# sourceMappingURL=OPT2HTMLWorker.js.map
+], ValidateContributionWorker);
+exports.ValidateContributionWorker = ValidateContributionWorker;
+//# sourceMappingURL=ValidateContributionWorker.js.map

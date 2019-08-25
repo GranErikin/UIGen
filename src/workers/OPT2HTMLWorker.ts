@@ -1,7 +1,10 @@
 import {Worker, WorkResults} from "./Worker"
 import {ExternalResourceFailureException, InputValidationError} from "./exceptions/WorkerExceptions";
-import {FetchTemplateRequestOptions} from "../gateways/EHRGateway";
 import {Variables} from "camunda-external-task-client-js";
+import {inject, named} from "inversify";
+import {TYPES} from "../di/types";
+import {OPTService} from "../opt/OPTService";
+import {Logger} from "../di/ThirdPartyTypes";
 
 interface OPT2HTMLParams {
     template: string;
@@ -9,9 +12,18 @@ interface OPT2HTMLParams {
 
 class OPT2HTMLWorker extends Worker {
 
-    readonly topic = "opt2html";
+    readonly topic = "optToHtml";
 
     readonly variableNames = ["template"];
+
+    readonly optService: OPTService;
+
+    constructor(
+        @inject(TYPES.OPTService)optService: OPTService,
+        @inject(TYPES.Logger) @named("workerLogger")workerLogger: Logger) {
+        super(workerLogger);
+        this.optService = optService;
+    }
 
     validateInput(): InputValidationError[] {
         return [];
@@ -20,12 +32,11 @@ class OPT2HTMLWorker extends Worker {
     work(params: OPT2HTMLParams): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject) => {
             try {
-                let options: FetchTemplateRequestOptions = new FetchTemplateRequestOptions(params.token, params.templateId);
-                this.gatewayFactory.build<FetchTemplateRequestOptions>(options).request().then((response) => {
+                this.optService.opt2html(params.template).then((html: string) => {
                     const processVariables = new Variables();
-                    processVariables.setTyped("template", {
-                        value: response.body,
-                        type: "Xml",
+                    processVariables.setTyped("html", {
+                        value: html,
+                        type: "string",
                         valueInfo: {
                             transient: true
                         }
@@ -44,8 +55,6 @@ class OPT2HTMLWorker extends Worker {
             }
         });
     }
-
-
 }
 
 export {OPT2HTMLWorker}

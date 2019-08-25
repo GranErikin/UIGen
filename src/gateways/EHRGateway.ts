@@ -1,45 +1,69 @@
 import {RequestOptions} from "./BaseGateway";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../di/types";
 
-const ehrServerHost = process.env.EHR_SERVER_HOST;
-const ehrAuthenticateUrl = `${ehrServerHost}/login?username=${process.env.EHR_SERVER_USERNAME}&password=${process.env.EHR_SERVER_PASSWORD}&organization=${process.env.EHR_SERVER_ORGANIZATION}&format=json`;
-const fetchOPTTemplateUrl = `${ehrServerHost}/templates/`;
-const storeContributionUrl = `${ehrServerHost}/ehrs/{ehrUID}/compositions?auditCommitter={committer}`;
+@injectable()
+export class EHRLoginRequestOptionsFactory {
+    readonly _optionsFactory: (body: any, headers: any, url: string) => RequestOptions;
 
+    constructor(
+        @inject(TYPES.RequestOptionFactory) factory: (category: string) => (body: any, headers: any, url: string) => RequestOptions // Injecting an engine factory
+    ) {
+        this._optionsFactory = factory("ehrLogin"); // Creating a diesel engine factory
+    }
+
+    public createOptions(body: any, headers: any, url: string): RequestOptions {
+        return this._optionsFactory(body, headers, url); // Creating a concrete diesel engine
+    }
+}
+
+@injectable()
+export class FetchTemplateRequestOptionsFactory {
+    private readonly _optionsFactory: (body: any, headers: any, url: string) => RequestOptions;
+
+    constructor(
+        @inject(TYPES.RequestOptionFactory) factory: (category: string) => (body: any, headers: any, url: string) => RequestOptions // Injecting an engine factory
+    ) {
+        this._optionsFactory = factory("fetchTemplate"); // Creating a diesel engine factory
+    }
+
+    public createOptions(body: any, headers: any, url: string): RequestOptions {
+        return this._optionsFactory(body, headers, url); // Creating a concrete diesel engine
+    }
+}
+
+@injectable()
+export class StoreContributionRequestOptionsFactory {
+    private readonly _optionsFactory: (body: any, headers: any, url: string) => RequestOptions;
+
+    constructor(
+        @inject(TYPES.RequestOptionFactory) factory: (category: string) => (body: any, headers: any, url: string) => RequestOptions // Injecting an engine factory
+    ) {
+        this._optionsFactory = factory("storeContribution"); // Creating a diesel engine factory
+    }
+
+    public createOptions(body: any, headers: any, url: string): RequestOptions {
+        return this._optionsFactory(body, headers, url); // Creating a concrete diesel engine
+    }
+}
+
+@injectable()
 export class FetchTemplateRequestOptions implements RequestOptions {
-    body = {};
-    headers: any;
     method = "GET";
-    url: string;
-
-    constructor(token: string, templateId: string) {
-        this.url = `${fetchOPTTemplateUrl}${templateId}`;
-        this.headers = {
-            'Accept': 'application/json, text/xml',
-            'Authorization': `Bearer ${token}`
-        }
-    }
+    url = '';
+    resolveWithFullResponse = true;
 }
 
-export class EHRAuthenticateRequestOptions implements RequestOptions {
-    body = {};
-    headers = {'Content-Type': 'application/json'};
-    method = "POST";
-    url = ehrAuthenticateUrl;
+@injectable()
+export class EHRLoginRequestOptions implements RequestOptions {
+    method = "GET";
+    url = '';
+    resolveWithFullResponse = true;
 }
 
+@injectable()
 export class StoreContributionRequestOptions implements RequestOptions {
-    body: string;
-    headers: any;
     method = "POST";
-    url = ehrAuthenticateUrl;
-
-    constructor(token: string, committer: string, ehrId: string, contribution: string) {
-        this.url = storeContributionUrl.replace('{ehrUID}', ehrId).replace('{committer}', committer);
-        this.headers = {
-            'Accept': 'application/json, text/xml',
-            'Content-Type': 'application/xml',
-            'Authorization': `Bearer ${token}`
-        };
-        this.body = contribution;
-    }
+    url = '';
+    resolveWithFullResponse = true;
 }

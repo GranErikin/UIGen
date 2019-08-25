@@ -12,7 +12,7 @@ function opt2html(req, res, next) {
         res.send(200, utils.buildRespose(true, {html}));
         next();
     });
-};
+}
 
 function opt2contribution(req, res, next) {
     let uid = req.params.uid;
@@ -24,7 +24,7 @@ function opt2contribution(req, res, next) {
         res.send(200, utils.buildRespose(true, {contribution}));
         next();
     });
-};
+}
 
 function opt2bundle(req, res, next) {
     let uid = req.params.uid;
@@ -55,6 +55,6 @@ function mergeContribution(req, res, next) {
         res.send(200, utils.buildRespose(true, {contribution}));
         next();
     })
-};
+}
 
 module.exports = {opt2html, opt2contribution, opt2bundle, mergeContribution};

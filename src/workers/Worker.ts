@@ -3,9 +3,8 @@ import {
     InputValidationError, InputValidationFailedException,
     MissingInputException, WorkerException
 } from "./exceptions/WorkerExceptions";
-import {inject, injectable, tagged} from "inversify";
+import {inject, injectable, named} from "inversify";
 import {TYPES} from "../di/types";
-import {GatewayFactory} from "../gateways/BaseGateway";
 import {Logger} from "../di/ThirdPartyTypes";
 
 /*
@@ -44,14 +43,10 @@ abstract class Worker {
 
     abstract readonly variableNames: string[];
 
-    readonly gatewayFactory: GatewayFactory;
-
     readonly workerLogger: Logger;
 
-    constructor(
-        @inject(TYPES.GatewayFactory) gatewayFactory: GatewayFactory,
-        @inject(TYPES.Logger) @tagged("name", "workerLogger")workerLogger: Logger) {
-        this.gatewayFactory = gatewayFactory;
+    protected constructor(
+        @inject(TYPES.Logger) @named("workerLogger")workerLogger: Logger) {
         this.workerLogger = workerLogger;
     }
 
@@ -82,7 +77,6 @@ abstract class Worker {
             this.workerLogger.info(completed);
             this.workerLogger.info(`Worker with topic: ${this.topic} completed work successfully`);
         } catch (workerException) {
-            this.workerLogger.error(workerException);
             this.handleException(taskWrapper.task, taskWrapper.taskService, workerException)
         }
     }
@@ -142,16 +136,16 @@ abstract class Worker {
     */
     async handleException(task: Task, taskService: TaskService, workerException: WorkerException) {
         try {
-            this.workerLogger.error(workerException.message);
-            const response = await taskService.handleFailure(task, {
+            await taskService.handleFailure(task, {
                 errorMessage: `Worker with topic: ${this.topic} failed to complete work`,
                 errorDetails: workerException.message,
                 retries: 0,
                 retryTimeout: 0
             });
             this.workerLogger.error(`Worker with topic: ${this.topic} failure handled`);
-            this.workerLogger.error(response);
+            this.workerLogger.error(workerException.message);
         } catch (err) {
+            this.workerLogger.error(`Unable to handle Failure for Worker with topic: ${this.topic}`);
             this.workerLogger.error(err);
         }
     }

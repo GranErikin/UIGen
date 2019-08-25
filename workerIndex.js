@@ -1,5 +1,4 @@
 "use strict";
-//import {OPTService} from "./src/opt/OPTService";
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils = require("./src/handlers/utils");
 const logger = require("./src/helpers/logger");
@@ -10,9 +9,6 @@ const restifyRouter = require("restify-router");
 const corsMiddleware = require("restify-cors-middleware");
 const types_1 = require("./src/di/types");
 const inversify_config_1 = require("./src/di/inversify.config");
-//import container from "./src/workers/di/inversify.config";
-//import {WorkerClient} from "./src/workers/WorkerClient";
-//import {TYPES} from "./src/workers/di/types";
 const router = new restifyRouter.Router();
 const server = restify.createServer({
     name: "OPT-Utils",
@@ -52,13 +48,8 @@ server.on('uncaughtException', function (err) {
 server.listen(process.env.PORT, function () {
     logger.info('%s listening at %s with %s', server.name, server.url, process.env.NODE_ENV);
 });
-//const workerClient = container.get <WorkerClient>(TYPES.WorkerClient);
-//workerClient.startClient();
-let opt = fs.readFileSync("./test/vital_signs_summary.en.v1.opt");
-const optService = inversify_config_1.default.get(types_1.TYPES.OPTService);
-optService.opt2html(opt.toString('UTF-8')).then((result) => {
-    console.log(result);
-}).catch((error) => {
-    console.log(error);
-});
+const workerClient = inversify_config_1.default.get(types_1.TYPES.WorkerClient);
+workerClient.startClient();
+//const test = container.getAll<Worker>(TYPES.Worker);
+//console.log(test[0].requestOptionsFactory.createOptions({}, {}, "hey"));
 //# sourceMappingURL=workerIndex.js.map

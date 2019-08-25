@@ -13,9 +13,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/async": "^3.0.1",
     "@types/bunyan": "^1.8.6",
     "@types/dotenv": "^6.1.1",
     "@types/is-uuid": "^1.0.0",
+    "@types/moment": "^2.13.0",
     "@types/node": "^12.7.0",
     "@types/request-promise": "^4.1.44",
     "@types/restify": "^7.2.12",

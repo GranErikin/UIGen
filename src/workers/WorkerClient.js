@@ -39,6 +39,7 @@ let WorkerClient = class WorkerClient {
     }
     subscribeToTopics() {
         this.workers.forEach((worker) => {
+            console.log(`Subscribing to topic -> ${worker.topic}`);
             this.client.subscribe(worker.topic, worker.handle.bind(worker));
         });
     }

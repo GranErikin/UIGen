@@ -24,7 +24,6 @@ const camunda_external_task_client_js_1 = require("camunda-external-task-client-
 const WorkerExceptions_1 = require("./exceptions/WorkerExceptions");
 const inversify_1 = require("inversify");
 const types_1 = require("../di/types");
-const BaseGateway_1 = require("../gateways/BaseGateway");
 /*
 * Utility class that wraps two "Variables" instances that are delivered to the TaskService when completing the task
 * the localVariablesResult parameter is optional
@@ -43,8 +42,7 @@ exports.WorkResults = WorkResults;
                                     So instead of calling task.variables.get("variableName") you can call params.variableName directly
 */
 let Worker = class Worker {
-    constructor(gatewayFactory, workerLogger) {
-        this.gatewayFactory = gatewayFactory;
+    constructor(workerLogger) {
         this.workerLogger = workerLogger;
     }
     /*
@@ -62,7 +60,6 @@ let Worker = class Worker {
                 this.workerLogger.info(`Worker with topic: ${this.topic} completed work successfully`);
             }
             catch (workerException) {
-                this.workerLogger.error(workerException);
                 this.handleException(taskWrapper.task, taskWrapper.taskService, workerException);
             }
         });
@@ -123,17 +120,17 @@ let Worker = class Worker {
     handleException(task, taskService, workerException) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                this.workerLogger.error(workerException.message);
-                const response = yield taskService.handleFailure(task, {
+                yield taskService.handleFailure(task, {
                     errorMessage: `Worker with topic: ${this.topic} failed to complete work`,
                     errorDetails: workerException.message,
                     retries: 0,
                     retryTimeout: 0
                 });
                 this.workerLogger.error(`Worker with topic: ${this.topic} failure handled`);
-                this.workerLogger.error(response);
+                this.workerLogger.error(workerException.message);
             }
             catch (err) {
+                this.workerLogger.error(`Unable to handle Failure for Worker with topic: ${this.topic}`);
                 this.workerLogger.error(err);
             }
         });
@@ -141,9 +138,8 @@ let Worker = class Worker {
 };
 Worker = __decorate([
     inversify_1.injectable(),
-    __param(0, inversify_1.inject(types_1.TYPES.GatewayFactory)),
-    __param(1, inversify_1.inject(types_1.TYPES.Logger)), __param(1, inversify_1.tagged("name", "workerLogger")),
-    __metadata("design:paramtypes", [BaseGateway_1.GatewayFactory, Object])
+    __param(0, inversify_1.inject(types_1.TYPES.Logger)), __param(0, inversify_1.named("workerLogger")),
+    __metadata("design:paramtypes", [Object])
 ], Worker);
 exports.Worker = Worker;
 //# sourceMappingURL=Worker.js.map

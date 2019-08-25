@@ -18,11 +18,11 @@ const camunda_external_task_client_js_1 = require("camunda-external-task-client-
 const inversify_1 = require("inversify");
 const types_1 = require("../di/types");
 const OPTService_1 = require("../opt/OPTService");
-let OPT2HTMLWorker = class OPT2HTMLWorker extends Worker_1.Worker {
+let MergeContributionWorker = class MergeContributionWorker extends Worker_1.Worker {
     constructor(optService, workerLogger) {
         super(workerLogger);
-        this.topic = "optToHtml";
-        this.variableNames = ["template"];
+        this.topic = "mergeContribution";
+        this.variableNames = ["answers", "taggedContribution"];
         this.optService = optService;
     }
     validateInput() {
@@ -31,11 +31,11 @@ let OPT2HTMLWorker = class OPT2HTMLWorker extends Worker_1.Worker {
     work(params) {
         return new Promise((resolve, reject) => {
             try {
-                this.optService.opt2html(params.template).then((html) => {
+                this.optService.mergeContribution(params.answers, params.taggedContribution).then((mergedContribution) => {
                     const processVariables = new camunda_external_task_client_js_1.Variables();
-                    processVariables.setTyped("html", {
-                        value: html,
-                        type: "string",
+                    processVariables.setTyped("mergedContribution", {
+                        value: mergedContribution,
+                        type: "xml",
                         valueInfo: {
                             transient: true
                         }
@@ -56,10 +56,10 @@ let OPT2HTMLWorker = class OPT2HTMLWorker extends Worker_1.Worker {
         });
     }
 };
-OPT2HTMLWorker = __decorate([
+MergeContributionWorker = __decorate([
     __param(0, inversify_1.inject(types_1.TYPES.OPTService)),
     __param(1, inversify_1.inject(types_1.TYPES.Logger)), __param(1, inversify_1.named("workerLogger")),
     __metadata("design:paramtypes", [OPTService_1.OPTService, Object])
-], OPT2HTMLWorker);
-exports.OPT2HTMLWorker = OPT2HTMLWorker;
-//# sourceMappingURL=OPT2HTMLWorker.js.map
+], MergeContributionWorker);
+exports.MergeContributionWorker = MergeContributionWorker;
+//# sourceMappingURL=MergeContributionWorker.js.map

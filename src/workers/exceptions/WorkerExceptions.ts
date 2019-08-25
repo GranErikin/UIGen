@@ -43,6 +43,19 @@ export class IDNotFoundOnTemplateException extends WorkerException {
     }
 }
 
+export class MetaFieldMissingException extends WorkerException {
+    constructor(fieldName: string, template: string) {
+        super(`A necessary meta field element was not found at path => ${fieldName} \\nTemplate might be malformed\\n${template}`);
+    }
+}
+
+export class ValidationServiceFailedException extends WorkerException {
+    constructor(message = "Validation Service Buffer could not be validate, check inval function from openEHR_OPT.jar") {
+        super(message);
+    }
+
+}
+
 export function buildValidationErrorMessage(topic: string, errors: InputValidationError[]): string {
     `Input validation failed for topic: ${topic}`;
     const message = "************************* Validation errors *************************";

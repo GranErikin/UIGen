@@ -8,6 +8,8 @@ import * as fs from "fs";
 import * as child_process from "child_process";
 import {DOMParser, XMLSerializer} from "xmldom";
 import * as xpath from "xpath";
+import * as moment from "moment";
+import * as async from "async";
 
 export type Request = typeof request;
 export type RequestPromise = request.RequestPromise;
@@ -25,3 +27,5 @@ export type EXEC = typeof child_process.execSync;
 export type _DOMParser = DOMParser;
 export type _XMLSerializer = XMLSerializer;
 export type XPath = typeof xpath;
+export type Moment = typeof moment;
+export type Async = typeof async;

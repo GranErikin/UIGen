@@ -1,4 +1,4 @@
-import {inject, tagged} from "inversify";
+import {inject, injectable, named} from "inversify";
 import {TYPES} from "../di/types";
 import {Request, Logger, RequestPromise} from "../di/ThirdPartyTypes"
 
@@ -7,6 +7,7 @@ export interface RequestOptions {
     method: string;
     headers?: any;
     body?: any;
+    resolveWithFullResponse: boolean
 }
 
 export interface RequesterResponse {
@@ -15,13 +16,13 @@ export interface RequesterResponse {
     body?: any;
 }
 
-
+@injectable()
 export class GatewayFactory {
     readonly requestEngine: Request;
     readonly requestLogger: Logger;
 
     constructor(
-        @inject(TYPES.Logger) @tagged("name", "gateway")requestLogger: Logger,
+        @inject(TYPES.Logger) @named("gatewayLogger")requestLogger: Logger,
         @inject(TYPES.Request) requestEngine: Request) {
         this.requestEngine = requestEngine;
         this.requestLogger = requestLogger;
@@ -39,7 +40,7 @@ export class Gateway<T extends RequestOptions> {
     readonly options: T;
 
     constructor(
-        @inject(TYPES.Logger) @tagged("name", "gatewayLogger")gatewayLogger: Logger,
+        @inject(TYPES.Logger) @named("gatewayLogger")gatewayLogger: Logger,
         @inject(TYPES.Request)requestEngine: Request,
         options: T) {
         this.requestEngine = requestEngine;
@@ -48,7 +49,8 @@ export class Gateway<T extends RequestOptions> {
     }
 
     request(): Promise<RequesterResponse> {
-        return new Promise<RequesterResponse>((resolve, reject) => {
+        this.options.body = JSON.stringify(this.options.body);
+        return new Promise<RequesterResponse>(async (resolve, reject) => {
             this.doRequest().then((response) => {
                 let requesterResponse = {
                     code: response.code,
@@ -58,7 +60,6 @@ export class Gateway<T extends RequestOptions> {
                 this.gatewayLogger.info(requesterResponse);
                 resolve(requesterResponse)
             }).catch((error) => {
-                this.gatewayLogger.error(error);
                 reject(error)
             })
         });

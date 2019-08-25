@@ -1,7 +1,3 @@
-//import {OPTService} from "./src/opt/OPTService";
-
-import {OPTService} from "./src/opt/OPTService";
-
 const utils = require("./src/handlers/utils");
 const logger = require("./src/helpers/logger");
 const routes = require("./src/routes");
@@ -11,10 +7,7 @@ import * as restifyRouter from "restify-router";
 import * as corsMiddleware from "restify-cors-middleware";
 import {TYPES} from "./src/di/types";
 import container from "./src/di/inversify.config";
-
-//import container from "./src/workers/di/inversify.config";
-//import {WorkerClient} from "./src/workers/WorkerClient";
-//import {TYPES} from "./src/workers/di/types";
+import {WorkerClient} from "./src/workers/WorkerClient";
 
 const router = new restifyRouter.Router();
 
@@ -64,14 +57,7 @@ server.listen(process.env.PORT, function () {
     logger.info('%s listening at %s with %s', server.name, server.url, process.env.NODE_ENV);
 });
 
-//const workerClient = container.get <WorkerClient>(TYPES.WorkerClient);
-//workerClient.startClient();
-
-let opt = fs.readFileSync("./test/vital_signs_summary.en.v1.opt");
-
-const optService: OPTService = container.get <OPTService>(TYPES.OPTService);
-optService.opt2html(opt.toString('UTF-8')).then((result) => {
-    console.log(result)
-}).catch((error) => {
-    console.log(error)
-});
+const workerClient = container.get <WorkerClient>(TYPES.WorkerClient);
+workerClient.startClient();
+//const test = container.getAll<Worker>(TYPES.Worker);
+//console.log(test[0].requestOptionsFactory.createOptions({}, {}, "hey"));

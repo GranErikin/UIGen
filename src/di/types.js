@@ -19,13 +19,24 @@ exports.TYPES = {
     UUID: Symbol.for("UUID"),
     FS: Symbol.for("fs"),
     EXEC: Symbol.for("exec"),
+    Async: Symbol.for("Async"),
+    Moment: Symbol.for("Moment"),
     //Application types
     Worker: Symbol.for("Worker"),
     WorkerClient: Symbol.for("WorkerClient"),
     EHRLoginWorker: Symbol.for("EHRLoginWorker"),
     FetchTemplateWorker: Symbol.for("FetchTemplateWorker"),
     OPT2HTMLWorker: Symbol.for("OPT2HTMLWorker"),
+    OPT2ContributionWorker: Symbol.for("OPT2ContributionWorker"),
+    StoreContributionWorker: Symbol.for("StoreContributionWorker"),
+    ValidateContributionWorker: Symbol.for("ValidateContributionWorker"),
     GatewayFactory: Symbol.for("GatewayFactory"),
-    OPTService: Symbol.for("OPTService")
+    OPTService: Symbol.for("OPTService"),
+    ContributionMerger: Symbol.for("ContributionMerger"),
+    RequestOptionFactory: Symbol.for("Factory<RequestOptions>"),
+    EHRLoginRequestOptionsFactory: Symbol.for("EHRLoginRequestOptionsFactory"),
+    FetchTemplateRequestOptionsFactory: Symbol.for("FetchTemplateRequestOptionsFactory"),
+    StoreContributionRequestOptionsFactory: Symbol.for("StoreContributionRequestOptionsFactory"),
+    RequestOptions: Symbol.for("RequestOptions")
 };
 //# sourceMappingURL=types.js.map

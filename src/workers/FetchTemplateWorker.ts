@@ -2,18 +2,38 @@ import {Worker, WorkResults} from "./Worker"
 import {ExternalResourceFailureException, InputValidationError} from "./exceptions/WorkerExceptions";
 import {Variables} from "camunda-external-task-client-js";
 import * as isUUID from "is-uuid";
-import {FetchTemplateRequestOptions} from "../gateways/EHRGateway";
+import {FetchTemplateRequestOptions, FetchTemplateRequestOptionsFactory} from "../gateways/EHRGateway";
+import {inject, injectable, named} from "inversify";
+import {TYPES} from "../di/types";
+import {GatewayFactory} from "../gateways/BaseGateway";
+import {Logger} from "../di/ThirdPartyTypes";
 
 interface FetchTemplateParams {
     token: string;
     templateId: string;
 }
 
+@injectable()
 class FetchTemplateWorker extends Worker {
 
     topic = "fetchTemplate";
 
     variableNames = ["token", "templateId"];
+
+    private readonly gatewayFactory: GatewayFactory;
+    private readonly requestOptionsFactory: FetchTemplateRequestOptionsFactory;
+    private readonly ehrServerHost: string;
+
+    constructor(
+        @inject(TYPES.String) @named("EHR_SERVER_HOST")ehrServerHost: string,
+        @inject(TYPES.FetchTemplateRequestOptionsFactory) requestOptionsFactory: FetchTemplateRequestOptionsFactory,
+        @inject(TYPES.GatewayFactory) gatewayFactory: GatewayFactory,
+        @inject(TYPES.Logger) @named("workerLogger")workerLogger: Logger) {
+        super(workerLogger);
+        this.gatewayFactory = gatewayFactory;
+        this.requestOptionsFactory = requestOptionsFactory;
+        this.ehrServerHost = ehrServerHost;
+    }
 
     validateInput(params: FetchTemplateParams): InputValidationError[] {
         const token = params.token;
@@ -42,7 +62,11 @@ class FetchTemplateWorker extends Worker {
     work(params: FetchTemplateParams): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject): void => {
             try {
-                let options: FetchTemplateRequestOptions = new FetchTemplateRequestOptions(params.token, params.templateId);
+                let fetchTemplateUrl = `${this.ehrServerHost}/templates/${params.templateId}`;
+                let options: FetchTemplateRequestOptions = this.requestOptionsFactory.createOptions({}, {
+                    'Accept': 'application/json, text/xml',
+                    'Authorization': `Bearer ${params.token}`
+                }, fetchTemplateUrl);
                 this.gatewayFactory.build<FetchTemplateRequestOptions>(options).request().then((response) => {
                     const processVariables = new Variables();
                     processVariables.setTyped("template", {
