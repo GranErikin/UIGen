@@ -1,5 +1,8 @@
 import {Worker, WorkResults} from "./Worker"
-import {ExternalResourceFailureException, InputValidationError} from "./exceptions/WorkerExceptions";
+import {
+    InputValidationError,
+    OPTServiceFailureException
+} from "./exceptions/WorkerExceptions";
 import {Variables} from "camunda-external-task-client-js";
 import {inject, named} from "inversify";
 import {TYPES} from "../di/types";
@@ -31,28 +34,24 @@ class OPT2HTMLWorker extends Worker {
 
     work(params: OPT2HTMLParams): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject) => {
-            try {
-                this.optService.opt2html(params.template).then((html: string) => {
-                    const processVariables = new Variables();
-                    processVariables.setTyped("html", {
-                        value: html,
-                        type: "string",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new WorkResults(processVariables));
+            this.optService.opt2html(params.template).then((html: string) => {
+                const processVariables = new Variables();
+                processVariables.setTyped("html", {
+                    value: {html: html},
+                    type: "json",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            } catch (error) {
+                resolve(new WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
-                reject(new ExternalResourceFailureException({
-                    body: error.response.body,
-                    error: error.error,
-                    message: error.message,
-                    uri: error.options.uri,
-                    statusCode: error.statusCode
+                reject(new OPTServiceFailureException({
+                    option: "uigen",
+                    error: error,
+                    input: params.template
                 }));
-            }
+            });
         });
     }
 }

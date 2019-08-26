@@ -30,29 +30,24 @@ let ValidateContributionWorker = class ValidateContributionWorker extends Worker
     }
     work(params) {
         return new Promise((resolve, reject) => {
-            try {
-                this.optService.validateInstance(params.mergedContribution).then((isValid) => {
-                    const processVariables = new camunda_external_task_client_js_1.Variables();
-                    processVariables.setTyped("isContributionValid", {
-                        value: isValid,
-                        type: "boolean",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new Worker_1.WorkResults(processVariables));
+            this.optService.validateInstance(params.mergedContribution).then((isValid) => {
+                const processVariables = new camunda_external_task_client_js_1.Variables();
+                processVariables.setTyped("isContributionValid", {
+                    value: isValid,
+                    type: "boolean",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            }
-            catch (error) {
+                resolve(new Worker_1.WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
-                reject(new WorkerExceptions_1.ExternalResourceFailureException({
-                    body: error.response.body,
-                    error: error.error,
-                    message: error.message,
-                    uri: error.options.uri,
-                    statusCode: error.statusCode
+                reject(new WorkerExceptions_1.OPTServiceFailureException({
+                    option: "inval",
+                    error: error,
+                    input: params.mergedContribution
                 }));
-            }
+            });
         });
     }
 };

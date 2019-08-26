@@ -29,6 +29,7 @@ const OPT2ContributionWorker_1 = require("../workers/OPT2ContributionWorker");
 const ValidateContributionWorker_1 = require("../workers/ValidateContributionWorker");
 const MergeContributionWorker_1 = require("../workers/MergeContributionWorker");
 const EHRGateway_1 = require("../gateways/EHRGateway");
+const VariableLoggerWorker_1 = require("../workers/VariableLoggerWorker");
 dotenv_1.config();
 let serverLogger = bunyan.createLogger({
     name: 'OPT-Utils',
@@ -94,6 +95,7 @@ const applicationDependencies = new inversify_1.ContainerModule((bind) => {
     bind(types_1.TYPES.Worker).to(ValidateContributionWorker_1.ValidateContributionWorker).inSingletonScope();
     bind(types_1.TYPES.Worker).to(StoreContributionWorker_1.StoreContributionWorker).inSingletonScope();
     bind(types_1.TYPES.Worker).to(MergeContributionWorker_1.MergeContributionWorker).inSingletonScope();
+    bind(types_1.TYPES.Worker).to(VariableLoggerWorker_1.VariableLoggerWorker).inSingletonScope();
     bind(types_1.TYPES.GatewayFactory).to(BaseGateway_1.GatewayFactory).inSingletonScope();
     bind(types_1.TYPES.OPTService).to(OPTService_1.OPTService).inSingletonScope();
     bind(types_1.TYPES.ContributionMerger).to(ContributionMerger_1.ContributionMerger).inSingletonScope();

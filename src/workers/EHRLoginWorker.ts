@@ -44,7 +44,7 @@ class EHRLoginWorker extends Worker {
     async work(): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject): void => {
             const ehrAuthenticateUrl = `${this.ehrServerHost}/login?username=${this.ehrServerUN}&password=${this.ehrServerPWD}&organization=${this.ehrServerOrg}&format=json`;
-            let options: EHRLoginRequestOptions = this.requestOptionsFactory.createOptions({}, {'Content-Type': 'application/json'}, ehrAuthenticateUrl);
+            let options: EHRLoginRequestOptions = this.requestOptionsFactory.createOptions("", {'Content-Type': 'application/json'}, ehrAuthenticateUrl);
             this.gatewayFactory.build<EHRLoginRequestOptions>(options).request().then((response) => {
                 const processVariables = new Variables();
                 processVariables.setTyped("token", {
@@ -54,9 +54,9 @@ class EHRLoginWorker extends Worker {
                         transient: true
                     }
                 });
-                resolve(new WorkResults(processVariables, undefined));
+                resolve(new WorkResults(processVariables));
             }).catch((error) => {
-                console.log(error);
+                this.workerLogger.error(error);
                 reject(new ExternalResourceFailureException({
                     body: error.response.body,
                     error: error.error,

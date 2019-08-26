@@ -1,5 +1,8 @@
 import {Worker, WorkResults} from "./Worker"
-import {ExternalResourceFailureException, InputValidationError} from "./exceptions/WorkerExceptions";
+import {
+    InputValidationError,
+    OPTServiceFailureException
+} from "./exceptions/WorkerExceptions";
 import {Variables} from "camunda-external-task-client-js";
 import {OPTService} from "../opt/OPTService";
 import {inject, named} from "inversify";
@@ -29,28 +32,24 @@ class ValidateContributionWorker extends Worker {
 
     work(params: ValidateContributionParams): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject) => {
-            try {
-                this.optService.validateInstance(params.mergedContribution).then((isValid: boolean) => {
-                    const processVariables = new Variables();
-                    processVariables.setTyped("isContributionValid", {
-                        value: isValid,
-                        type: "boolean",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new WorkResults(processVariables));
+            this.optService.validateInstance(params.mergedContribution).then((isValid: boolean) => {
+                const processVariables = new Variables();
+                processVariables.setTyped("isContributionValid", {
+                    value: isValid,
+                    type: "boolean",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            } catch (error) {
+                resolve(new WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
-                reject(new ExternalResourceFailureException({
-                    body: error.response.body,
-                    error: error.error,
-                    message: error.message,
-                    uri: error.options.uri,
-                    statusCode: error.statusCode
+                reject(new OPTServiceFailureException({
+                    option: "inval",
+                    error: error,
+                    input: params.mergedContribution
                 }));
-            }
+            });
         });
     }
 

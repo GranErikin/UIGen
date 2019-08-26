@@ -80,7 +80,7 @@ export class OPTService {
                 let uuid = this.uuidGenerator.v4();
                 this.writeTmpFile(template, uuid, "opt");
                 this.exec(`java -cp \"./lib/*:$GROOVY_HOME/lib/*:lib/openEHR_OPT.jar\" com.cabolabs.openehr.opt.Main ingen ${uuid}  1 tagged`);
-                let contributionBuffer: Buffer = this.fileSystem.readFileSync(`tmp/${uuid}.instance`);
+                let contributionBuffer: Buffer = this.fileSystem.readFileSync(`tmp/${uuid}.contribution`);
                 this.deleteTmpFile(uuid, "contribution");
                 this.deleteTmpFile(uuid, "opt");
                 resolve(contributionBuffer.toString());
@@ -100,8 +100,8 @@ export class OPTService {
                 this.contributionMerger.mergeContribution(answers, contribution, (err, result) => {
                     if (err) {
                         reject(err);
+                        return;
                     }
-
                     resolve(result);
                 })
             } catch (error) {

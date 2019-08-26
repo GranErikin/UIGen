@@ -30,29 +30,24 @@ let OPT2ContributionWorker = class OPT2ContributionWorker extends Worker_1.Worke
     }
     work(params) {
         return new Promise((resolve, reject) => {
-            try {
-                this.optService.opt2Contribution(params.template).then((contribution) => {
-                    const processVariables = new camunda_external_task_client_js_1.Variables();
-                    processVariables.setTyped("contribution", {
-                        value: contribution,
-                        type: "xml",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new Worker_1.WorkResults(processVariables));
+            this.optService.opt2Contribution(params.template).then((contribution) => {
+                const processVariables = new camunda_external_task_client_js_1.Variables();
+                processVariables.setTyped("contribution", {
+                    value: contribution,
+                    type: "xml",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            }
-            catch (error) {
+                resolve(new Worker_1.WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
-                reject(new WorkerExceptions_1.ExternalResourceFailureException({
-                    body: error.response.body,
-                    error: error.error,
-                    message: error.message,
-                    uri: error.options.uri,
-                    statusCode: error.statusCode
+                reject(new WorkerExceptions_1.OPTServiceFailureException({
+                    option: "ingen",
+                    error: error,
+                    input: params.template
                 }));
-            }
+            });
         });
     }
 };

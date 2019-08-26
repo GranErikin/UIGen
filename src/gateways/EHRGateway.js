@@ -64,6 +64,7 @@ let FetchTemplateRequestOptions = class FetchTemplateRequestOptions {
         this.method = "GET";
         this.url = '';
         this.resolveWithFullResponse = true;
+        this.json = true;
     }
 };
 FetchTemplateRequestOptions = __decorate([
@@ -72,9 +73,10 @@ FetchTemplateRequestOptions = __decorate([
 exports.FetchTemplateRequestOptions = FetchTemplateRequestOptions;
 let EHRLoginRequestOptions = class EHRLoginRequestOptions {
     constructor() {
-        this.method = "GET";
+        this.method = "POST";
         this.url = '';
         this.resolveWithFullResponse = true;
+        this.json = true;
     }
 };
 EHRLoginRequestOptions = __decorate([
@@ -86,6 +88,7 @@ let StoreContributionRequestOptions = class StoreContributionRequestOptions {
         this.method = "POST";
         this.url = '';
         this.resolveWithFullResponse = true;
+        this.json = false;
     }
 };
 StoreContributionRequestOptions = __decorate([

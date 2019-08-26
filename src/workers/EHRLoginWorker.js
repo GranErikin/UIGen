@@ -46,7 +46,7 @@ let EHRLoginWorker = class EHRLoginWorker extends Worker_1.Worker {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
                 const ehrAuthenticateUrl = `${this.ehrServerHost}/login?username=${this.ehrServerUN}&password=${this.ehrServerPWD}&organization=${this.ehrServerOrg}&format=json`;
-                let options = this.requestOptionsFactory.createOptions({}, { 'Content-Type': 'application/json' }, ehrAuthenticateUrl);
+                let options = this.requestOptionsFactory.createOptions("", { 'Content-Type': 'application/json' }, ehrAuthenticateUrl);
                 this.gatewayFactory.build(options).request().then((response) => {
                     const processVariables = new camunda_external_task_client_js_1.Variables();
                     processVariables.setTyped("token", {
@@ -56,9 +56,9 @@ let EHRLoginWorker = class EHRLoginWorker extends Worker_1.Worker {
                             transient: true
                         }
                     });
-                    resolve(new Worker_1.WorkResults(processVariables, undefined));
+                    resolve(new Worker_1.WorkResults(processVariables));
                 }).catch((error) => {
-                    console.log(error);
+                    this.workerLogger.error(error);
                     reject(new WorkerExceptions_1.ExternalResourceFailureException({
                         body: error.response.body,
                         error: error.error,

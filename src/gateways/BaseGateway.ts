@@ -7,7 +7,8 @@ export interface RequestOptions {
     method: string;
     headers?: any;
     body?: any;
-    resolveWithFullResponse: boolean
+    resolveWithFullResponse: boolean,
+    json: boolean
 }
 
 export interface RequesterResponse {
@@ -49,7 +50,6 @@ export class Gateway<T extends RequestOptions> {
     }
 
     request(): Promise<RequesterResponse> {
-        this.options.body = JSON.stringify(this.options.body);
         return new Promise<RequesterResponse>(async (resolve, reject) => {
             this.doRequest().then((response) => {
                 let requesterResponse = {

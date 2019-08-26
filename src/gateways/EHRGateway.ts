@@ -52,13 +52,15 @@ export class FetchTemplateRequestOptions implements RequestOptions {
     method = "GET";
     url = '';
     resolveWithFullResponse = true;
+    json = true;
 }
 
 @injectable()
 export class EHRLoginRequestOptions implements RequestOptions {
-    method = "GET";
+    method = "POST";
     url = '';
     resolveWithFullResponse = true;
+    json = true;
 }
 
 @injectable()
@@ -66,4 +68,6 @@ export class StoreContributionRequestOptions implements RequestOptions {
     method = "POST";
     url = '';
     resolveWithFullResponse = true;
+    body?: any;
+    json = false;
 }

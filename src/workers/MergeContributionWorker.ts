@@ -1,5 +1,8 @@
 import {Worker, WorkResults} from "./Worker"
-import {ExternalResourceFailureException, InputValidationError} from "./exceptions/WorkerExceptions";
+import {
+    InputValidationError,
+    OPTServiceFailureException
+} from "./exceptions/WorkerExceptions";
 import {Variables} from "camunda-external-task-client-js";
 import {inject, named} from "inversify";
 import {TYPES} from "../di/types";
@@ -8,14 +11,14 @@ import {Logger} from "../di/ThirdPartyTypes";
 
 interface MergeContributionParams {
     answers: any;
-    taggedContribution: string;
+    contribution: string;
 }
 
 class MergeContributionWorker extends Worker {
 
     readonly topic = "mergeContribution";
 
-    readonly variableNames = ["answers", "taggedContribution"];
+    readonly variableNames = ["answers", "contribution"];
 
     readonly optService: OPTService;
 
@@ -32,28 +35,24 @@ class MergeContributionWorker extends Worker {
 
     work(params: MergeContributionParams): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject) => {
-            try {
-                this.optService.mergeContribution(params.answers, params.taggedContribution).then((mergedContribution: string) => {
-                    const processVariables = new Variables();
-                    processVariables.setTyped("mergedContribution", {
-                        value: mergedContribution,
-                        type: "xml",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new WorkResults(processVariables));
+            this.optService.mergeContribution(params.answers, params.contribution).then((mergedContribution: string) => {
+                const processVariables = new Variables();
+                processVariables.setTyped("mergedContribution", {
+                    value: mergedContribution,
+                    type: "xml",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            } catch (error) {
+                resolve(new WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
-                reject(new ExternalResourceFailureException({
-                    body: error.response.body,
-                    error: error.error,
-                    message: error.message,
-                    uri: error.options.uri,
-                    statusCode: error.statusCode
+                reject(new OPTServiceFailureException({
+                    option: "merge",
+                    error: error,
+                    input: JSON.stringify({"answers": params.answers, "contribution": params.contribution})
                 }));
-            }
+            });
         });
     }
 }

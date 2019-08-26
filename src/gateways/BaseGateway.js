@@ -45,7 +45,6 @@ let Gateway = class Gateway {
         this.options = options;
     }
     request() {
-        this.options.body = JSON.stringify(this.options.body);
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             this.doRequest().then((response) => {
                 let requesterResponse = {

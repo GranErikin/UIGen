@@ -46,6 +46,7 @@ import {
     StoreContributionRequestOptions,
     StoreContributionRequestOptionsFactory
 } from "../gateways/EHRGateway";
+import {VariableLoggerWorker} from "../workers/VariableLoggerWorker";
 
 config();
 let serverLogger: Logger = bunyan.createLogger({
@@ -118,6 +119,7 @@ const applicationDependencies = new ContainerModule((bind) => {
     bind<Worker>(TYPES.Worker).to(ValidateContributionWorker).inSingletonScope();
     bind<Worker>(TYPES.Worker).to(StoreContributionWorker).inSingletonScope();
     bind<Worker>(TYPES.Worker).to(MergeContributionWorker).inSingletonScope();
+    bind<Worker>(TYPES.Worker).to(VariableLoggerWorker).inSingletonScope();
     bind<GatewayFactory>(TYPES.GatewayFactory).to(GatewayFactory).inSingletonScope();
     bind<OPTService>(TYPES.OPTService).to(OPTService).inSingletonScope();
     bind<ContributionMerger>(TYPES.ContributionMerger).to(ContributionMerger).inSingletonScope();

@@ -42,36 +42,34 @@ class StoreContributionWorker extends Worker {
 
     work(params: StoreContributionParams): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject) => {
-            try {
-                const storeContributionUrl = `${this.ehrServerHost}/ehrs/${params.ehrId}/compositions?auditCommitter=${params.committer}`;
-                const options: StoreContributionRequestOptions = this.requestOptionsFactory.createOptions(params.mergedContribution,
-                    {
-                        'Accept': 'application/json, text/xml',
-                        'Content-Type': 'application/xml',
-                        'Authorization': `Bearer ${params.token}`
-                    }, storeContributionUrl);
-                //params.token, params.committer, params.ehrId, params.mergedContribution);
-                this.gatewayFactory.build<StoreContributionRequestOptions>(options).request().then((response) => {
-                    const processVariables = new Variables();
-                    processVariables.setTyped("storeContributionSuccess", {
-                        value: response.code === 200,
-                        type: "strings",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new WorkResults(processVariables, undefined));
-                })
-            } catch (error) {
+            const storeContributionUrl = `${this.ehrServerHost}/ehrs/${params.ehrId}/compositions?auditCommitter=${encodeURI(params.committer)}`;
+            const options: StoreContributionRequestOptions = this.requestOptionsFactory.createOptions(params.mergedContribution,
+                {
+                    'Accept': 'application/json, text/xml',
+                    'Content-Type': 'application/xml',
+                    'Authorization': `Bearer ${params.token}`
+                }, storeContributionUrl);
+            //params.token, params.committer, params.ehrId, params.mergedContribution);
+            this.gatewayFactory.build<StoreContributionRequestOptions>(options).request().then((response) => {
+                const processVariables = new Variables();
+                processVariables.setTyped("storeContributionSuccess", {
+                    value: response.code === 200,
+                    type: "string",
+                    valueInfo: {
+                        transient: true
+                    }
+                });
+                resolve(new WorkResults(processVariables, undefined));
+            }).catch((error) => {
                 this.workerLogger.error(error);
                 reject(new ExternalResourceFailureException({
-                    body: error.response.body,
+                    body: options.body,
                     error: error.error,
                     message: error.message,
-                    uri: error.options.uri,
+                    uri: error.options.url,
                     statusCode: error.statusCode
                 }));
-            }
+            })
         })
     }
 

@@ -5,6 +5,10 @@ declare module 'camunda-external-task-client-js' {
         setTyped(variableName: string, content: object): Variables
 
         get(variableName: string): any
+
+        getAll(): any
+
+        getAllTyped(): any
     }
 
     interface CustomOptions {

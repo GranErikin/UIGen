@@ -52,34 +52,31 @@ let FetchTemplateWorker = class FetchTemplateWorker extends Worker_1.Worker {
     }
     work(params) {
         return new Promise((resolve, reject) => {
-            try {
-                let fetchTemplateUrl = `${this.ehrServerHost}/templates/${params.templateId}`;
-                let options = this.requestOptionsFactory.createOptions({}, {
-                    'Accept': 'application/json, text/xml',
-                    'Authorization': `Bearer ${params.token}`
-                }, fetchTemplateUrl);
-                this.gatewayFactory.build(options).request().then((response) => {
-                    const processVariables = new camunda_external_task_client_js_1.Variables();
-                    processVariables.setTyped("template", {
-                        value: response.body,
-                        type: "Xml",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new Worker_1.WorkResults(processVariables));
+            let fetchTemplateUrl = `${this.ehrServerHost}/templates/${params.templateId}`;
+            let options = this.requestOptionsFactory.createOptions("", {
+                'Accept': 'application/json, text/xml',
+                'Authorization': `Bearer ${params.token}`
+            }, fetchTemplateUrl);
+            this.gatewayFactory.build(options).request().then((response) => {
+                const processVariables = new camunda_external_task_client_js_1.Variables();
+                processVariables.setTyped("template", {
+                    value: response.body,
+                    type: "Xml",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            }
-            catch (error) {
+                resolve(new Worker_1.WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
                 reject(new WorkerExceptions_1.ExternalResourceFailureException({
                     body: error.response.body,
                     error: error.error,
                     message: error.message,
-                    uri: error.options.uri,
+                    uri: error.options.url,
                     statusCode: error.statusCode
                 }));
-            }
+            });
         });
     }
 };

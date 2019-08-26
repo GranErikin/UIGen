@@ -2,7 +2,8 @@ import {inject, injectable} from "inversify";
 import {TYPES} from "../di/types";
 import {_DOMParser, _XMLSerializer, Async, Moment, UUID, XPath} from "../di/ThirdPartyTypes";
 import {XPathSelect} from "xpath";
-import {MetaFieldMissingException} from "../workers/exceptions/WorkerExceptions";
+
+//import {MetaFieldMissingException} from "../workers/exceptions/WorkerExceptions";
 
 interface Entry {
     path: string;
@@ -45,7 +46,6 @@ export class ContributionMerger {
     }
 
     mergeContribution = (answers: any, contribution: string, cb: (error?: string | Error, result?: string) => void) => {
-
         let xmlDoc: Document = this.domParser.parseFromString(contribution);
 
         let paths = answers.data;
@@ -55,6 +55,7 @@ export class ContributionMerger {
 
         let queryBase = "//versions:data/versions:content/versions:items";
         let hasItems = select(queryBase, xmlDoc);
+
         if (hasItems.length === 0) {
             queryBase = "//versions:data/versions:content";
         }
@@ -105,85 +106,82 @@ export class ContributionMerger {
 
     setContributionMeta = (xmlDoc: Document, meta: any, select: XPathSelect) => {
 
-
         let contributionIdNode = select("//versions:contribution/versions:id/versions:value", xmlDoc, true) as Node;
         //console.log(contributionIdNode[0].firstChild.data);
-        if (!contributionIdNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:contribution/versions:id/versions:value", xmlDoc.toString());
+        if (contributionIdNode && contributionIdNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:contribution/versions:id/versions:value", xmlDoc.toString());
+            contributionIdNode.firstChild.textContent = this.uuidGenerator.v4();
         }
-
-        contributionIdNode.firstChild.textContent = this.uuidGenerator.v4();
 
         let systemIdNode = select("//versions:commit_audit/versions:system_id", xmlDoc, true) as Node;
         //console.log(systemIdNode[0].firstChild.data);
-        if (!systemIdNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:commit_audit/versions:system_id", xmlDoc.toString());
+        if (systemIdNode && systemIdNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:commit_audit/versions:system_id", xmlDoc.toString());
+            systemIdNode.firstChild.textContent = meta.system_id;
         }
-
-        systemIdNode.firstChild.textContent = meta.system_id;
 
         let committerIdNode = select("//versions:commit_audit/versions:committer/versions:external_ref/versions:id/versions:value", xmlDoc, true) as Node;
         //console.log(committerIdNode[0].firstChild.data);
-        if (!committerIdNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:commit_audit/versions:committer/versions:external_ref/versions:id/versions:value", xmlDoc.toString());
+        if (committerIdNode && committerIdNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:commit_audit/versions:committer/versions:external_ref/versions:id/versions:value", xmlDoc.toString());
+            committerIdNode.firstChild.textContent = this.uuidGenerator.v4();
         }
-        committerIdNode.firstChild.textContent = this.uuidGenerator.v4();
 
         let committerName = select("//versions:commit_audit/versions:committer/versions:name", xmlDoc, true) as Node;
         //console.log(committerName[0].firstChild.data);
-        if (!committerName.firstChild) {
-            throw new MetaFieldMissingException("//versions:commit_audit/versions:committer/versions:name", xmlDoc.toString());
+        if (committerName && committerName.firstChild) {
+            //throw new MetaFieldMissingException("//versions:commit_audit/versions:committer/versions:name", xmlDoc.toString());
+            committerName.firstChild.textContent = meta.committer_name;
         }
-        committerName.firstChild.textContent = meta.committer_name;
 
         let timeCommittedNode = select("//versions:commit_audit/versions:time_committed/versions:value", xmlDoc, true) as Node;
         //console.log(timeCommittedNode[0].firstChild.data);
-        if (!timeCommittedNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:commit_audit/versions:time_committed/versions:value", xmlDoc.toString());
+        if (timeCommittedNode && timeCommittedNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:commit_audit/versions:time_committed/versions:value", xmlDoc.toString());
+            timeCommittedNode.firstChild.textContent = this.moment().format(this.dateFormat);
         }
-        timeCommittedNode.firstChild.textContent = this.moment().format(this.dateFormat);
 
         let versionsIdNode = select("//versions:uid/versions:value", xmlDoc, true) as Node;
         //console.log(versionsIdNode[0].firstChild.data);
-        if (!versionsIdNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:uid/versions:value", xmlDoc.toString());
+        if (versionsIdNode && versionsIdNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:uid/versions:value", xmlDoc.toString());
+            versionsIdNode.firstChild.textContent = this.uuidGenerator.v4() + '::EMR_APP::1';
         }
-        versionsIdNode.firstChild.textContent = this.uuidGenerator.v4() + '::EMR_APP::1';
 
         let composerIdNode = select("//versions:data/versions:composer/versions:external_ref/versions:id/versions:value", xmlDoc, true) as Node;
         //console.log(composerIdNode[0].firstChild.data);
-        if (!composerIdNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:data/versions:composer/versions:external_ref/versions:id/versions:value", xmlDoc.toString());
+        if (composerIdNode && composerIdNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:data/versions:composer/versions:external_ref/versions:id/versions:value", xmlDoc.toString());
+            composerIdNode.firstChild.textContent = meta.composer_id;
         }
-        composerIdNode.firstChild.textContent = meta.composer_id;
 
         let composerNameNode = select("//versions:data/versions:composer/versions:name", xmlDoc, true) as Node;
         //console.log(composerNameNode[0].firstChild.data);
-        if (!composerNameNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:data/versions:composer/versions:name", xmlDoc.toString());
+        if (composerNameNode && composerNameNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:data/versions:composer/versions:name", xmlDoc.toString());
+            composerNameNode.firstChild.textContent = meta.composer_name;
         }
-        composerNameNode.firstChild.textContent = meta.composer_name;
 
         let compositionDateNode = select("//versions:data/versions:context/versions:start_time/versions:value", xmlDoc, true) as Node;
         //console.log(compositionDateNode[0].firstChild.data);
-        if (!compositionDateNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:data/versions:context/versions:start_time/versions:value", xmlDoc.toString());
+        if (compositionDateNode && compositionDateNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:data/versions:context/versions:start_time/versions:value", xmlDoc.toString());
+            compositionDateNode.firstChild.textContent = this.moment().format(this.dateFormat);
         }
-        compositionDateNode.firstChild.textContent = this.moment().format(this.dateFormat);
 
         let compositionSettingNode = select("//versions:data/versions:context/versions:setting/versions:value", xmlDoc, true) as Node;
         //console.log(compositionSettingNode[0].firstChild.data);
-        if (!compositionSettingNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:data/versions:context/versions:setting/versions:value", xmlDoc.toString());
+        if (compositionSettingNode && compositionSettingNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:data/versions:context/versions:setting/versions:value", xmlDoc.toString());
+            compositionSettingNode.firstChild.textContent = meta.composition_setting_value;
         }
-        compositionSettingNode.firstChild.textContent = meta.composition_setting_value;
 
         let compositionSettingCodeNode = select("//versions:data/versions:context/versions:setting/versions:defining_code/versions:code_string", xmlDoc, true) as Node;
         //console.log(compositionSettingCodeNode[0].firstChild.data);
-        if (!compositionSettingCodeNode.firstChild) {
-            throw new MetaFieldMissingException("//versions:data/versions:context/versions:setting/versions:defining_code/versions:code_string", xmlDoc.toString());
+        if (compositionSettingCodeNode && compositionSettingCodeNode.firstChild) {
+            //throw new MetaFieldMissingException("//versions:data/versions:context/versions:setting/versions:defining_code/versions:code_string", xmlDoc.toString());
+            compositionSettingCodeNode.firstChild.textContent = meta.composition_setting_code;
         }
-        compositionSettingCodeNode.firstChild.textContent = meta.composition_setting_code;
 
     };
 
@@ -233,7 +231,6 @@ export class ContributionMerger {
 
     replaceValue = (node: any, type: string, value: any) => {
 
-
         switch (type) {
             case 'DV_TEXT':
                 //console.log(`DV_TEXT ${node.childNodes[1].firstChild.data}`);
@@ -241,6 +238,10 @@ export class ContributionMerger {
                 break;
             case 'DV_COUNT':
                 //console.log(`DV_COUNT ${node.childNodes[1].firstChild.data}`);
+                node.childNodes[1].firstChild.textContent = value;
+                break;
+            case 'DV_DATE':
+                //console.log(`DV_DATE_TIME ${node.childNodes[1].firstChild.data}`);
                 node.childNodes[1].firstChild.textContent = value;
                 break;
             case 'DV_DATE_TIME':

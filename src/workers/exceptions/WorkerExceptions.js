@@ -18,6 +18,12 @@ class ExternalResourceFailureException extends WorkerException {
     }
 }
 exports.ExternalResourceFailureException = ExternalResourceFailureException;
+class OPTServiceFailureException extends WorkerException {
+    constructor(error) {
+        super(`OPT Conversion service failed with option:${error.option}\n with input:${error.input}\n with message:${error.error}`);
+    }
+}
+exports.OPTServiceFailureException = OPTServiceFailureException;
 class EnvironmentVariableMissingException extends WorkerException {
     constructor(name) {
         super(`The value for the environment variable called: ${name} is null or undefined`);

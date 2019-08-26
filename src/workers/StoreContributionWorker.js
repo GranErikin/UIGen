@@ -33,36 +33,33 @@ let StoreContributionWorker = class StoreContributionWorker extends Worker_1.Wor
     }
     work(params) {
         return new Promise((resolve, reject) => {
-            try {
-                const storeContributionUrl = `${this.ehrServerHost}/ehrs/${params.ehrId}/compositions?auditCommitter=${params.committer}`;
-                const options = this.requestOptionsFactory.createOptions(params.mergedContribution, {
-                    'Accept': 'application/json, text/xml',
-                    'Content-Type': 'application/xml',
-                    'Authorization': `Bearer ${params.token}`
-                }, storeContributionUrl);
-                //params.token, params.committer, params.ehrId, params.mergedContribution);
-                this.gatewayFactory.build(options).request().then((response) => {
-                    const processVariables = new camunda_external_task_client_js_1.Variables();
-                    processVariables.setTyped("storeContributionSuccess", {
-                        value: response.code === 200,
-                        type: "strings",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new Worker_1.WorkResults(processVariables, undefined));
+            const storeContributionUrl = `${this.ehrServerHost}/ehrs/${params.ehrId}/compositions?auditCommitter=${encodeURI(params.committer)}`;
+            const options = this.requestOptionsFactory.createOptions(params.mergedContribution, {
+                'Accept': 'application/json, text/xml',
+                'Content-Type': 'application/xml',
+                'Authorization': `Bearer ${params.token}`
+            }, storeContributionUrl);
+            //params.token, params.committer, params.ehrId, params.mergedContribution);
+            this.gatewayFactory.build(options).request().then((response) => {
+                const processVariables = new camunda_external_task_client_js_1.Variables();
+                processVariables.setTyped("storeContributionSuccess", {
+                    value: response.code === 200,
+                    type: "string",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            }
-            catch (error) {
+                resolve(new Worker_1.WorkResults(processVariables, undefined));
+            }).catch((error) => {
                 this.workerLogger.error(error);
                 reject(new WorkerExceptions_1.ExternalResourceFailureException({
-                    body: error.response.body,
+                    body: options.body,
                     error: error.error,
                     message: error.message,
-                    uri: error.options.uri,
+                    uri: error.options.url,
                     statusCode: error.statusCode
                 }));
-            }
+            });
         });
     }
 };

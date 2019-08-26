@@ -22,7 +22,7 @@ let MergeContributionWorker = class MergeContributionWorker extends Worker_1.Wor
     constructor(optService, workerLogger) {
         super(workerLogger);
         this.topic = "mergeContribution";
-        this.variableNames = ["answers", "taggedContribution"];
+        this.variableNames = ["answers", "contribution"];
         this.optService = optService;
     }
     validateInput() {
@@ -30,29 +30,24 @@ let MergeContributionWorker = class MergeContributionWorker extends Worker_1.Wor
     }
     work(params) {
         return new Promise((resolve, reject) => {
-            try {
-                this.optService.mergeContribution(params.answers, params.taggedContribution).then((mergedContribution) => {
-                    const processVariables = new camunda_external_task_client_js_1.Variables();
-                    processVariables.setTyped("mergedContribution", {
-                        value: mergedContribution,
-                        type: "xml",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new Worker_1.WorkResults(processVariables));
+            this.optService.mergeContribution(params.answers, params.contribution).then((mergedContribution) => {
+                const processVariables = new camunda_external_task_client_js_1.Variables();
+                processVariables.setTyped("mergedContribution", {
+                    value: mergedContribution,
+                    type: "xml",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            }
-            catch (error) {
+                resolve(new Worker_1.WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
-                reject(new WorkerExceptions_1.ExternalResourceFailureException({
-                    body: error.response.body,
-                    error: error.error,
-                    message: error.message,
-                    uri: error.options.uri,
-                    statusCode: error.statusCode
+                reject(new WorkerExceptions_1.OPTServiceFailureException({
+                    option: "merge",
+                    error: error,
+                    input: JSON.stringify({ "answers": params.answers, "contribution": params.contribution })
                 }));
-            }
+            });
         });
     }
 };

@@ -4,6 +4,13 @@ export interface InputValidationError {
     validationErrorMessage: string;
 }
 
+export interface OPTServiceError {
+    option: string;
+    input: string;
+    error: string;
+}
+
+
 export interface ExternalResourceError {
     uri: string;
     statusCode: number;
@@ -28,6 +35,12 @@ export class MissingInputException extends WorkerException {
 export class ExternalResourceFailureException extends WorkerException {
     constructor(error: ExternalResourceError) {
         super(`External resource at ${error.uri} failed with:\nStatus Code:${error.statusCode}\nError:${error.error}\nMessage:${error.message}\nBody:${error.body}`);
+    }
+}
+
+export class OPTServiceFailureException extends WorkerException {
+    constructor(error: OPTServiceError) {
+        super(`OPT Conversion service failed with option:${error.option}\n with input:${error.input}\n with message:${error.error}`);
     }
 }
 

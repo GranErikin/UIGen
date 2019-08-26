@@ -61,33 +61,31 @@ class FetchTemplateWorker extends Worker {
 
     work(params: FetchTemplateParams): Promise<WorkResults> {
         return new Promise<WorkResults>((resolve, reject): void => {
-            try {
-                let fetchTemplateUrl = `${this.ehrServerHost}/templates/${params.templateId}`;
-                let options: FetchTemplateRequestOptions = this.requestOptionsFactory.createOptions({}, {
-                    'Accept': 'application/json, text/xml',
-                    'Authorization': `Bearer ${params.token}`
-                }, fetchTemplateUrl);
-                this.gatewayFactory.build<FetchTemplateRequestOptions>(options).request().then((response) => {
-                    const processVariables = new Variables();
-                    processVariables.setTyped("template", {
-                        value: response.body,
-                        type: "Xml",
-                        valueInfo: {
-                            transient: true
-                        }
-                    });
-                    resolve(new WorkResults(processVariables));
+            let fetchTemplateUrl = `${this.ehrServerHost}/templates/${params.templateId}`;
+            let options: FetchTemplateRequestOptions = this.requestOptionsFactory.createOptions("", {
+                'Accept': 'application/json, text/xml',
+                'Authorization': `Bearer ${params.token}`
+            }, fetchTemplateUrl);
+            this.gatewayFactory.build<FetchTemplateRequestOptions>(options).request().then((response) => {
+                const processVariables = new Variables();
+                processVariables.setTyped("template", {
+                    value: response.body,
+                    type: "Xml",
+                    valueInfo: {
+                        transient: true
+                    }
                 });
-            } catch (error) {
+                resolve(new WorkResults(processVariables));
+            }).catch((error) => {
                 this.workerLogger.error(error);
                 reject(new ExternalResourceFailureException({
                     body: error.response.body,
                     error: error.error,
                     message: error.message,
-                    uri: error.options.uri,
+                    uri: error.options.url,
                     statusCode: error.statusCode
                 }));
-            }
+            });
         });
     }
 

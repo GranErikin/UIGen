@@ -20,7 +20,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const camunda_external_task_client_js_1 = require("camunda-external-task-client-js");
 const WorkerExceptions_1 = require("./exceptions/WorkerExceptions");
 const inversify_1 = require("inversify");
 const types_1 = require("../di/types");
@@ -31,7 +30,7 @@ const types_1 = require("../di/types");
 class WorkResults {
     constructor(processVariablesResult, localVariablesResult) {
         this.processVariablesResult = processVariablesResult;
-        this.localVariablesResult = localVariablesResult ? localVariablesResult : new camunda_external_task_client_js_1.Variables();
+        this.localVariablesResult = localVariablesResult;
     }
 }
 exports.WorkResults = WorkResults;
@@ -55,8 +54,7 @@ let Worker = class Worker {
                 const params = this.mapInput(taskWrapper.task);
                 this.validate(params);
                 const workResults = yield this.work(params);
-                const completed = yield this.complete(taskWrapper.task, taskWrapper.taskService, workResults);
-                this.workerLogger.info(completed);
+                yield this.complete(taskWrapper.task, taskWrapper.taskService, workResults);
                 this.workerLogger.info(`Worker with topic: ${this.topic} completed work successfully`);
             }
             catch (workerException) {
@@ -76,11 +74,16 @@ let Worker = class Worker {
     }
     /*
     * Maps each name in "parameterNames" from the task Object into the params Object for easier access and checks for any missing input parameters
+    * If parameter Contains a single element with value "all" or "variables" all variables are return wrapped in a Variables object
     * Throws MissingInputException if any required field is missing
     */
     mapInput(task) {
         const missingInputs = [];
         const paramsHolder = {};
+        if (this.variableNames.length === 1 && this.variableNames[0] === "all") {
+            paramsHolder.taskVariables = task.variables;
+            return paramsHolder;
+        }
         this.variableNames.forEach((variableName) => {
             const value = task.variables.get(variableName);
             if (value == null) {
@@ -102,10 +105,16 @@ let Worker = class Worker {
     * automatically
     */
     complete(task, taskService, workResults) {
-        this.workerLogger.info(taskService);
+        //this.workerLogger.info(taskService);
         return new Promise((resolve, reject) => {
             try {
-                taskService.complete(task, workResults.processVariablesResult, workResults.localVariablesResult).then((result) => {
+                if (workResults.localVariablesResult) {
+                    taskService.complete(task, workResults.processVariablesResult, workResults.localVariablesResult).then((result) => {
+                        resolve(result);
+                    });
+                    return;
+                }
+                taskService.complete(task, workResults.processVariablesResult).then((result) => {
                     resolve(result);
                 });
             }
